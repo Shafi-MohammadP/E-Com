@@ -212,7 +212,7 @@
                                     <h3 class="product-title"><a
                                             href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name}}</a></h3>
                                     <!-- End .product-title -->
-                                    {{c.variant.product.product_description}}
+                                    {% comment %} {{c.variant.product.product_description}} {% endcomment %}
                                     <div class="product-price">
                                         $   {{c.variant.product.product_price}}
                                     </div><!-- End .product-price -->
@@ -272,7 +272,7 @@
                                         {% comment %} <a href="#">Digital Cameras</a> {% endcomment %}
                                     </div><!-- End .product-cat -->
                                     <h3 class="product-title"><a href="{% url 'product_show' c.variant.product.id c.variant.id %}"></a>{{c.variant.product.product_name}}</h3><!-- End .product-title -->
-                                    {{c.variant.product.product_description}}
+                                    {% comment %} {{c.variant.product.product_description}} {% endcomment %}
                                     <div class="product-price">
                                         ${{c.variant.product.product_price}}
                                         
@@ -337,7 +337,7 @@
                                     </div><!-- End .product-cat -->
                                     <h3 class="product-title"><a href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name}}</a></h3>
                                     <!-- End .product-title -->
-                                    {{c.variant.product.product_description}}
+                                    {% comment %} {{c.variant.product.product_description}} {% endcomment %}
                                     <div class="product-price">
                                         ${{c.variant.product.product_price}}
                                         

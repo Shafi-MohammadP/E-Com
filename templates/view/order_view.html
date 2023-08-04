@@ -160,40 +160,54 @@
                                 <td><b>{{ i.variant.product.product_price}}</td>
                                 <td><b>{{ i.quantity }}</td>
 
-                                <td>
-                                    {% if i.orderitem_status.item_status == 'Pending' %}
-                                    <span class="badge rounded-pill alert-secondary status-badge">{{ i.orderitem_status.item_status }}</span>
-                                    {% elif i.orderitem_status.item_status == 'Processing' %}
-                                    <span class="badge rounded-pill alert-warning status-badge">{{ i.orderitem_status.item_status }}</span>
-                                    {% elif i.orderitem_status.item_status == 'Shipped' %}
-                                    <span class="badge rounded-pill alert-primary status-badge">{{ i.orderitem_status.item_status }}</span>
-                                    {% elif i.orderitem_status.item_status == 'Delivered' %}
-                                    <span class="badge rounded-pill alert-success status-badge">{{ i.orderitem_status.item_status }}</span>
-                                    {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
-                                    <span class="badge rounded-pill alert-danger status-badge">{{ i.orderitem_status.item_status }}</span>
-                                    {% endif %}
-                                </td>
+                                    <td>
+                                        {% if i.orderitem_status.item_status == 'Pending' %}
+                                        <span class="badge rounded-pill alert-secondary status-badge">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Processing' %}
+                                        <span class="badge rounded-pill alert-secondary status-badge">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Shipped' %}
+                                        <span class="badge rounded-pill alert-primary status-badge">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Delivered' %}
+                                        <span class="badge rounded-pill alert-success status-badge">
+                                            {{ i.orderitem_status.item_status }}</span>
+                                        {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                        <span class="badge rounded-pill alert-danger status-badge">
+                                            {{i.orderitem_status.item_status }}</span>
+                                        {% endif %}
+                                    </td>
 
                                 <td>
-                                    <form action="{% url 'change_status_order' %}" id="form_{{ i.id }}" method="POST" onchange="submitForm(event, {{ i.id }})">
+                                    <form class="status-form" action="{% url 'change_status' %}" method="post">
                                         {% csrf_token %}
+                                        <input type="hidden" value="{{ i.variant.id }}" name="variant_id">
                                         <input type="hidden" value="{{ i.id }}" name="orderitem_id">
-                                        <select name="status" class="form-select" style="width: 120px; ">
-                                            <option value="Pending">Pending</option>
-                                            <option value="Processing">Processing</option>
-                                            <option value="Shipped">Shipped</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                            <option value="Return">Return</option>
-                                        </select>
-                                        <br>
+                                        <div class="col-lg-11 col-11 col-md-10">
+                                            <select class="form-select status-select" name="status">
+                                                {% for item in item_status_o %}
+                                                <option value="{{ item.id }}" {% if item.id == i.orderitem_status.id %}selected{% endif %}>
+                                                    {{ item.item_status }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </form>
                                 </td>
 
                                 </td>
                                 {% endfor %}
 
-
+                                <script>
+                                    // JavaScript to automatically submit the form when the select value changes for each row
+                                    const statusForms = document.querySelectorAll('.status-form');
+                                    statusForms.forEach((form) => {
+                                        const selectElement = form.querySelector('.status-select');
+                                        selectElement.addEventListener('change', () => {
+                                            form.submit();
+                                        });
+                                    });
+                                </script>
 
 
 
@@ -214,68 +228,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
 
-<style>
-    .swal2-popup {
-        font-size: 0.8rem;
-    }
 
-    .swal2-title {
-        font-size: 1rem;
-    }
-
-    .swal2-content {
-        font-size: 0.8rem;
-    }
-</style>
-<script>
-    function submitForm(event, orderId) {
-        event.preventDefault();
-
-        var formData = new FormData($('#form_' + orderId)[0]);
-
-        fetch("{% url 'change_status_order' %}", {
-            method: "POST",
-            body: formData,
-            headers: {
-                'X-CSRFToken': "{{ csrf_token }}",
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Status changed successfully!');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Status changed successfully!',
-                });
-
-                var newStatus = $('#form_' + orderId + ' select[name="status"]').val();
-                var statusBadge = $('#status_' + orderId);
-
-                statusBadge.removeClass().addClass('badge rounded-pill status-badge');
-                switch (newStatus) {
-                    // ... update the status badge as before ...
-                }
-                statusBadge.text(newStatus);
-            } else {
-                console.error('Error changing status: ' + data.message);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to change status. Please try again later.',
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error changing status: ' + error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to change status. Please try again later.',
-            });
-        });
-    }
-</script>
 
 {% endblock %}

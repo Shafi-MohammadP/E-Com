@@ -61,13 +61,13 @@
                                 <td>
                                     {% if i.order_status.order_status == 'Pending' %}
                                     <span class="badge rounded-pill alert-secondary">{{ i.order_status.order_status }}</span>
-                                    {% elif i.order_status.order_status == 'Processing'%}
+                                    {% elif i.order_status.order_status == 'Processing' %}
                                     <span class="badge rounded-pill alert-secondary">{{ i.order_status.order_status }}</span>
-                                    {% elif  i.order_status.order_status == 'Cancelled'%}
-                                    <span class="badge rounded-pill alert-danger">{{ i.order_status.order_status }}</span>
-                                    {% elif  i.order_status.order_status == 'Delivered'%}
+                                    {% elif i.order_status.order_status == 'Shipped' %}
+                                    <span class="badge rounded-pill alert-primary">{{ i.order_status.order_status }}</span>
+                                    {% elif i.order_status.order_status == 'Delivered' %}
                                     <span class="badge rounded-pill alert-success">{{ i.order_status.order_status }}</span>
-                                    {% elif  i.order_status.order_status == 'Shipped'%}
+                                    {% elif i.order_status.order_status == 'Cancelled' or i.order_status.order_status == 'Return' %}
                                     <span class="badge rounded-pill alert-danger">{{ i.order_status.order_status }}</span>
                                     {% endif %}
                                     
@@ -84,7 +84,7 @@
                                     {% endif %} {% endcomment %}
                                 </td>
                                 <td>
-                                    <form id="" method="post"
+                                    {% comment %} <form id="" method="post"
                                         onchange="submitForm(event)">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ i.id }}" name="orderitem_id">
@@ -97,7 +97,7 @@
                                             <option value="Return">Return</option>
                                         </select>
                                         <br>
-                                    </form>
+                                    </form> {% endcomment %}
 
                                 </td>
 
