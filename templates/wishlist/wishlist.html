@@ -5,8 +5,6 @@
 {% load mathfilters %}
 
 
-
-
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         <div class="container">
@@ -19,12 +17,14 @@
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
 
-    {% comment %} <div class="page-content">
+    <div class="page-content">
         <div class="container">
+            {% if wishlist %}
             <table class="table table-wishlist table-mobile">
                 <thead>
                     <tr>
@@ -37,52 +37,54 @@
                 </thead>
 
                 <tbody>
-                    
-                    {% for i in cart %}
+                    {% for i in wishlist %}
                     <tr>
                         <td class="product-col">
                             <div class="product">
-                                
                                 <figure class="product-media">
                                     <a href="#">
-                                        <h1>sdwfewfef</h1>
-                                        {% for i in img  %}
-                                        {% if j.variant.id == j.variant.id %}
-                                        <img src="{{j.image.url}}"
-                                            alt="Variant image">
-                                        {% endif %}
-                                        {% endfor %}
-                                    </a>
+                                        <a href="#">
+                                            {% for j in img %}
+                                            {% if j.variant.id == i.variant.id %}
+                                            <img src="{{j.image.url}}" alt="Variant image">
+                                            {% endif %}
+                                            {% endfor %}
+                                        </a>
                                 </figure>
 
                                 <h3 class="product-title">
-                                    <a href="#">dsdffsf{{i.variant.product.product_name}}</a>
+                                    <a href="#">{{i.variant.product.product_name}}</a>
                                 </h3><!-- End .product-title -->
                             </div><!-- End .product -->
                         </td>
                         <td class="price-col">${{i.variant.product.product_price}}</td>
+                        {% if i.variant.quantity > 0 %}
                         <td class="stock-col"><span class="in-stock">In stock</span></td>
-                        <td>suiiiiiiiiiiiiiiiiiiiiiiii</td>
                         <td class="action-col">
-                            <div class="dropdown">
-                                <button class="btn btn-block btn-outline-primary-2" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="icon-list-alt"></i>Select Options
-                                </button>
-
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">First option</a>
-                                    <a class="dropdown-item" href="#">Another option</a>
-                                    <a class="dropdown-item" href="#">The best option</a>
-                                </div>
-                            </div>
+                            <button class="btn btn-block btn-outline-primary-2"><i
+                                    class="icon-cart-plus"></i>Add to Cart</button>
                         </td>
-                        <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button>
+                        {% else %}
+                        <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
+                        <td></td>
+                        {% endif %}
+                         
+                        
+                            
+                            
+                    
+                        <td class="remove-col"><a href="{% url 'wish_remove' i.id %}">  <button href="##" class="btn-remove"> <i class="icon-close"></i></button>
                         </td>
                     </tr>
                     {% endfor %}
+
                 </tbody>
             </table><!-- End .table table-wishlist -->
+            {% else %}
+            <table class="table table-wishlist table-mobile">
+            <span class="in-stock">you have no wishlist</span>
+            </table>
+            {% endif %}
             <div class="wishlist-share">
                 <div class="social-icons social-icons-sm mb-2">
                     <label class="social-label">Share on:</label>
@@ -99,110 +101,6 @@
                 </div><!-- End .soial-icons -->
             </div><!-- End .wishlist-share -->
         </div><!-- End .container -->
-    </div><!-- End .page-content --> {% endcomment %}
-    <div class="page-content">
-        <div class="cart">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-
-
-                        <table class="table table-cart table-mobile">
-                            <thead>
-
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Color</th>
-                                    {% comment %} <th>Size</th> {% endcomment %}
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {% for i in wishlist %}
-                                <tr>
-                                    <td class="product-col">
-                                        <div class="product">
-                                            <figure class="product-media">
-                                                <a href="#">
-
-                                                    {% for j in img %}
-                                                    {% if j.variant.id == i.variant.id %}
-                                                    <img src="{{ j.image.url }}" alt="Variant Image">
-                                                    {% endif %}
-                                                    {% endfor %}
-
-                                                </a>
-                                            </figure>
-
-                                            <h3 class="product-title">
-                                                <a href="{% url 'product_show' i.variant.product.id i.variant.id %}">{{i.variant.product.product_name}}</a>
-                                            </h3><!-- End .product-title -->
-                                        </div><!-- End .product -->
-                                    </td>
-                                    <td class="price-col">{{i.variant.color.color_name}}</td>
-                                    {% comment %} <td class="price-col">{{i.variant.size.size_range}}</td> {% endcomment %}
-                                    <td class="price-col">${{i.variant.product.product_price}}</td>
-                                    <td class="quantity-col product_data">
-                                        <div class="input-group quantity mx-auto " style="width: 100px;">
-                                            <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
-                                                <div class="product-details-quantity">
-                                                    <input readonly class="mtext-104 cl3 txt-center num-product"
-                                                        type="number" min="1" max="10" name="num-product"
-                                                        value="{{i.product_qty}}" id="pro_qty{{i.id}}">
-
-                                                </div><!-- End .product-details-quantity -->
-
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                   
-                                    <!-- Assuming the previous code is here and we focus on the "total-col" element -->
-                                    <td class="total-col">
-                                        $<span id='single_{{i.id}}'>
-                                            {% if single %}
-                                            {{ single }}
-                                            {% else %}
-                                            {{i.single_total}}
-                                            {% endif %}
-                                        </span>
-                                    </td>
-
-
-                                    <td class="remove-col"><a href=""><button
-                                                class="btn-remove"><i class="icon-close"></i></button></a></td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table><!-- End .table table-wishlist -->
-                        
-                        <div class="cart-bottom">
-                            <div class="cart-discount">
-                                <form action="#">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" required placeholder="coupon code">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-primary-2" type="submit"><i
-                                                    class="icon-long-arrow-right"></i></button>
-                                        </div><!-- .End .input-group-append -->
-                                    </div><!-- End .input-group -->
-                                </form>
-                            </div><!-- End .cart-discount -->
-
-                            <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
-                                    class="icon-refresh"></i></a>
-                        </div><!-- End .cart-bottom -->
-                    </div><!-- End .col-lg-9 -->
-                   
-                </div><!-- End .row -->
-            </div><!-- End .container -->
-        </div><!-- End .cart -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 
@@ -373,6 +271,13 @@
     </div><!-- End .social-icons -->
 </div><!-- End .mobile-menu-wrapper -->
 </div><!-- End .mobile-menu-container -->
+
+
+
+
+
+
+
 
 
 
