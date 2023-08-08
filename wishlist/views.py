@@ -1,5 +1,6 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from product.models import Product, Color
+from django.http import Http404
 from variant.models import Variant, VariantImage
 # from user.models import CustomUser
 from django.http import JsonResponse
@@ -7,6 +8,7 @@ from cart.models import Cart
 from .models import Wishlist
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from category.models import category
 # Create your views here.
 
 
@@ -21,11 +23,13 @@ def wishlist(request):
             id__in=variants).values('id', 'quantity')
         quantity_dict = {variant['id']: variant['quantity']
                          for variant in variant_quantity}
+        cate = category.objects.all()
 
         context = {
             'wishlist': wishlist,
             'img': img,
             'quantity_dict': quantity_dict,
+            'cate': cate
         }
         return render(request, 'wishlist/wishlist.html', context)
     else:
@@ -85,3 +89,25 @@ def wish_remove(request, remove_id):
 
 
 #     return redirect('home')
+
+def wish_product_show(request, prod_id, img_id):
+
+    variant = VariantImage.objects.filter(variant=img_id)
+    variant_images = VariantImage.objects.filter(
+        variant__product__id=prod_id).distinct('variant__product')
+    color = VariantImage.objects.filter(
+        variant__product__id=prod_id).distinct('variant__color')
+
+    try:
+        product_category = get_object_or_404(category, id=prod_id)
+    except category.DoesNotExist:
+        raise Http404("Category does not exist")
+    context = {
+        'variant': variant,
+        'color': color,
+        'variant_images': variant_images,
+        'product_category': product_category
+        # 'cart':cart
+    }
+
+    return render(request, 'product/wishproductview.html', context)

@@ -53,7 +53,10 @@
                                 </figure>
 
                                 <h3 class="product-title">
-                                    <a href="#">{{i.variant.product.product_name}}</a>
+                                    {% comment %} <a href="" class="product-details-link" data-product-id="{{ i.variant.product.id }}" data-img-id="{{ i.variant.id }}">{{ i.variant.product.product_name }}</a> {% endcomment %}
+                                    <a href="{% url 'wishproduct_show' i.variant.product.id i.variant.id %}">{{ i.variant.product.product_name }}
+                                        <img src="{{i.image.url}}"  class="product-image">
+                                    </a>
                                 </h3><!-- End .product-title -->
                             </div><!-- End .product -->
                         </td>
@@ -271,6 +274,8 @@
     </div><!-- End .social-icons -->
 </div><!-- End .mobile-menu-wrapper -->
 </div><!-- End .mobile-menu-container -->
+
+
 
 
 

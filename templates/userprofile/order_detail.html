@@ -148,7 +148,7 @@
                                             <th scope="col">price</th>
                                             <th scope="col">Quantity</th>
                                             <th scope="col">Status</th>
-                                            <th scope="col">Edit status</th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -174,28 +174,38 @@
                                             
                                             <td>
                                                 {% if i.orderitem_status.item_status == 'Pending' %}
-                                        <span class="badge rounded-pill alert-secondary status-badge">
+                                        <span class="badge bg-primary rounded-3 fw-semibold">
                                             {{ i.orderitem_status.item_status }}</span>
                                         {% elif i.orderitem_status.item_status == 'Processing' %}
-                                        <span class="badge rounded-pill alert-secondary status-badge">
+                                        <span class="badge bg-primary rounded-3 fw-semibold">
                                             {{ i.orderitem_status.item_status }}</span>
                                         {% elif i.orderitem_status.item_status == 'Shipped' %}
-                                        <span class="badge rounded-pill alert-primary status-badge">
+                                        <span class="badge bg-secondary rounded-3 fw-semibold">
                                             {{ i.orderitem_status.item_status }}</span>
                                         {% elif i.orderitem_status.item_status == 'Delivered' %}
-                                        <span class="badge rounded-pill alert-success status-badge">
+                                        <span class="badge bg-successs rounded-3 fw-semibold">
                                             {{ i.orderitem_status.item_status }}</span>
                                         {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
-                                        <span class="badge rounded-pill alert-danger status-badge">
+                                        <span class="badge bg-danger rounded-3 fw-semibold">
                                             {{i.orderitem_status.item_status }}</span>
                                         {% endif %}
                                             </td>
 
                                             <td>
-
+                                                {% if i.orderitem_status.item_status == 'Delivered' %}
+                                                <button type="button" class="btn btn-outline-primary-2 return-button" data-item-id="{{ i.id }}" data-status="Return">
+                                                    <span>Return</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                                {% elif i.orderitem_status.item_status == 'Return' or i.orderitem_status.item_status == 'Cancelled' %}
+                                                {% else %}
+                                                <button type="button" class="btn btn-outline-primary-2 cancel-button" data-item-id="{{ i.id }}" data-status="Cancelled">
+                                                    <span>Cancel</span>
+                                                    <i class="icon-long-arrow-right"></i>
+                                                </button>
+                                                {% endif %}
                                             </td>
-
-                                            </td>
+                                            
 
 
 
@@ -221,6 +231,59 @@
 <!-- Add SweetAlert2 CSS and JS files -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+{% comment %} <script>
+$(document).ready(function () {
+    $('.return-button, .cancel-button').click(function () {
+        var itemId = $(this).data('item-id');
+        var newStatus = $(this).data('status');
+        
+        var formData = new FormData();
+        formData.append('orderitem_id', itemId);
+        formData.append('status', newStatus);
+        
+        $.ajax({
+            type: "POST",
+            url: "{% url 'api_change_status' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': "{{ csrf_token }}",
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    console.log('Order Cancelled successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Order Cancelled  successfully!',
+                    });
+                    
+                    // Update UI as needed
+                    setTimeout(function () {
+                        window.location.href = "{% url 'userprofile' %}"; // Update with your actual URL
+                    }, 3000); // Adjust the time delay as needed
+                } else {
+                    console.error('Error changing status: ' + response.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Failed to change status. Please try again later.',
+                    });
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('Error changing status: ' + errorThrown);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to change status. Please try again later.',
+                });
+            }
+        });
+    });
+});
+</script> {% endcomment %}
 
 
 

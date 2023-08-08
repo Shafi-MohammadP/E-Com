@@ -50,3 +50,8 @@ def product_show(request, prod_id, img_id):
     }
 
     return render(request, 'product/product_show.html', context)
+
+
+def shop(request):
+
+    return render(request, 'shop/shop.html')

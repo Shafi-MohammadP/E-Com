@@ -63,10 +63,8 @@
 								<div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
 									aria-labelledby="tab-dashboard-link">
 
-									<p>Hello <span class="font-weight-normal text-dark">{{user.username}}</span> <br>
-									<p>Hello <span class="font-weight-normal text-dark">{{user.first_name}}</span> <br>
-									<p>Hello <span class="font-weight-normal text-dark">{{user.last_name}}</span> <br>
-									<p>Hello <span class="font-weight-normal text-dark">{{user.email}}</span> <br>
+									Hello, <h4><span class="font-weight-normal text-dark">{{user.first_name}} {{user.last_name}} </h4></span> <br>
+									
 
 
 										From your account dashboard you can view your <a href="#"
@@ -115,7 +113,7 @@
 																<td><a href="{% url 'order_detail' order.id %}"
 																		class="btn btn-outline-primary-2">Order
 																		Details</a></td>
-																<td><b>{{ order.order_status }}</td>
+																
 																	<td>
 																		<b class="{% if order.order_status.order_status == 'Pending' %}text-secondary{% endif %}
 																				  {% if order.order_status.order_status == 'Processing' %}text-primary{% endif %}
@@ -230,12 +228,9 @@
 
 														<tr>
 															<td><strong>Full Name</strong></td>
-															<td>:{{user.first_name}}</td>
+															<td>:{{user.first_name}} {{user.last_name}}</td>
 														</tr>
-														<tr>
-															<td><strong>Full Name</strong></td>
-															<td>:{{user.last_name}}</td>
-														</tr>
+														
 														<tr>
 															<td><strong>User Name</strong></td>
 															<td>:{{user.username}}</td>

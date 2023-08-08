@@ -195,13 +195,14 @@
                                     <a href="{% url 'product_show' c.variant.product.id c.variant.id %}">
                                         <img src="{{c.image.url}}" alt="Product image" class="product-image">
                                     </a>
-
+                                    <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                                name="num-product" value="1" id="qty-input">
                                     <div class="product-action-vertical">
                                         <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
                                     </div><!-- End .product-action -->
 
                                     <div class="product-action product-action-dark">
-                                        <a href="#" class="btn-product btn-cart"  title="Add to cart"><span>add to cart</span></a>
+                                        <a href=""  data-product_id="{{ c.variant.id }}" class="btn-product btn-cart add-to-cart-btn"><span>add to cart</span></a>
                                         <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
@@ -257,12 +258,14 @@
                                         <img src="{{c.image.url}}" alt="Product image" class="product-image">
                                     </a>
 
+                                    <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                                name="num-product" value="1" id="qty-input">
                                     <div class="product-action-vertical">
                                         <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
                                     </div><!-- End .product-action -->
 
                                     <div class="product-action product-action-dark">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                        <a href=""  data-product_id="{{ c.variant.id }}" class="btn-product btn-cart add-to-cart-btn"><span>add to cart</span></a>
                                         <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
@@ -317,12 +320,14 @@
                                         <img src="{{c.image.url}}" alt="Product image" class="product-image">
                                     </a>
 
+                                    <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                                name="num-product" value="1" id="qty-input">
                                     <div class="product-action-vertical">
                                         <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
                                     </div><!-- End .product-action -->
 
                                     <div class="product-action product-action-dark">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                        <a href=""  data-product_id="{{ c.variant.id }}" class="btn-product btn-cart add-to-cart-btn"><span>add to cart</span></a>
                                         <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
@@ -511,13 +516,14 @@
                                         <img src="{{c.image.url}}" alt="Product image" class="product-image">
                                     </a>
 
+                                    <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                                name="num-product" value="1" id="qty-input">
                                     <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
                                     </div><!-- End .product-action -->
 
                                     <div class="product-action product-action-dark">
-                                        <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to
+                                        <a href=""  data-product_id="{{ c.variant.id }}" class="btn-product btn-cart add-to-cart-btn"><span>add to cart</span></a>
                                                 cart</span></a>
                                         <a href="popup/quickView.html" class="btn-product btn-quickview"
                                             title="Quick view"><span>quick view</span></a>
@@ -1973,6 +1979,56 @@
    
 </body>
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $('.add-to-cart-btn').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).data('product_id');
+        var add_qty = $('#qty-input').val();
+        var add_size = $('#size-input').val();
+
+        // var cart_qty = $('#pro_qty' + product_id).val();  
+        console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'add_cart' %}",
+            data: {
+
+                'variant_id': product_id,
+                'add_size':add_size,
+                'add_qty': add_qty,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+
+                console.log(response);
+
+
+
+                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully') { 
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+            }
+        });
+    });
+</script>
 
 <!-- molla/index-3.html  22 Nov 2019 09:55:58 GMT -->
 
