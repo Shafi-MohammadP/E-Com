@@ -1,3 +1,5 @@
+# from .models import Product, VariantImage, category
+from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control, never_cache
 
@@ -53,5 +55,13 @@ def product_show(request, prod_id, img_id):
 
 
 def shop(request):
+    categories = category.objects.all()
+    variant_images = VariantImage.objects.order_by(
+        'variant__product').distinct('variant__product')
 
-    return render(request, 'shop/shop.html')
+    context = {
+        'categories': categories,
+        'variant_images': variant_images,
+    }
+
+    return render(request, 'shop/shop.html', context)
