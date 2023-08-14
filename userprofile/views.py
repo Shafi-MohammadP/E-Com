@@ -10,6 +10,9 @@ from django.contrib import messages, auth
 from django.contrib.auth.password_validation import validate_password
 from django.shortcuts import redirect, get_object_or_404
 from django.http import JsonResponse
+from django.db.models import OuterRef, Subquery
+from cart.models import Cart
+from wishlist.models import Wishlist
 
 # verification email
 import re
@@ -18,7 +21,7 @@ from django.conf import settings
 import random
 from checkout.models import Order, OrderItem, Orderstatus, Itemstatus
 # from checkout.models import Order, OrderItem
-from .models import Address
+from .models import Address, Wallet
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from user.models import User
@@ -32,15 +35,32 @@ def userprofile(request):
     user = request.user
     addresses = Address.objects.filter(user=request.user)
     orders = Order.objects.filter(user=request.user)
+    walletamount = Wallet.objects.filter(user=request.user)
+    print(walletamount, '546sdfffffffffffffffffff')
+    try:
+        cart_count = Cart.objects.filter(user=request.user).count()
+        wishlist_count = Wishlist.objects.filter(user=request.user).count()
+    except:
+        cart_count = False
+        wishlist_count = False
+
+    # try:
+
+    #     walletamount = Wallet.objects.filter(user=request.user)
+    # except Wallet.DoesNotExist:
+    #     walletamount = 0
     context = {
         'user': user,
         'addresses': addresses,
         'orders': orders,
+        'walletamount': walletamount,
+        'wishlist_count': wishlist_count,
+        'cart_count': cart_count,
     }
     return render(request, 'userprofile/userprofile.html', context)
 
 
-def add_address(request):
+def add_address(request, check_id):
     if request.method == 'POST':
         # Code for processing form data and validation
         # ...
@@ -137,8 +157,20 @@ def add_address(request):
         ads.state = state
         ads.save()
         messages.success(request, 'Address added succesfully')
-        return redirect('userprofile')
-    return render(request, 'userprofile/add_address.html')
+
+        if check_id == 1:
+            check = 1
+            return redirect('userprofile')
+        else:
+            check = 2
+            return redirect('checkout')
+
+    if check_id == 1:
+        check = 1
+    else:
+        check = 2
+
+    return render(request, 'userprofile/add_address.html', {'check': check})
 
 
 def edit_address(request, edit_id):
@@ -364,27 +396,119 @@ def validatepassword(new_password):
         return False
 
 
-def order_detail_view(request, order_id):
+# def order_detail_view(request, order_id):
+#     try:
+#         orderview = Order.objects.get(id=order_id)
+#         address = Address.objects.get(id=orderview.address.id)
+#         products = OrderItem.objects.filter(order=order_id)
+#         variant_ids = [product.variant.id for product in products]
+#         image = VariantImage.objects.filter(
+#             variant__id__in=variant_ids).distinct('variant__product')
+#         item_status_o = Itemstatus.objects.all()
+#         orders = Order.objects.filter(user=request.user)
+#         context = {
+#             'orderview': orderview,
+#             'address': address,
+#             'products': products,
+#             'image': image,
+#             'item_status_o': item_status_o,
+#             'orders': orders,
+
+#         }
+
+#         return render(request, 'userprofile/order_detail.html', context)
+#     except Order.DoesNotExist:
+#         print("Order does not exist")
+#     except Address.DoesNotExist:
+#         print("Address does not exist")
+#     return redirect('userprofile')
+
+# def order_detail_view(request, order_id):
+#     try:
+#         orderview = Order.objects.get(id=order_id)
+#         address = Address.objects.get(id=orderview.address.id)
+#         products = OrderItem.objects.filter(order=order_id)
+
+#         # Collect all variant IDs for the products in the order
+#         variant_ids = [product.variant.id for product in products]
+
+#         # Retrieve variant images for the collected variant IDs
+#         # This will give you images for all color variants of the products
+#         images = VariantImage.objects.filter(variant__id__in=variant_ids)
+
+#         item_status_o = Itemstatus.objects.all()
+#         orders = Order.objects.filter(user=request.user)
+
+#         context = {
+#             'orderview': orderview,
+#             'address': address,
+#             'products': products,
+#             'images': images,  # Changed 'image' to 'images'
+#             'item_status_o': item_status_o,
+#             'orders': orders,
+#         }
+
+#         return render(request, 'userprofile/order_detail.html', context)
+#     except Order.DoesNotExist:
+#         print("Order does not exist")
+#     except Address.DoesNotExist:
+#         print("Address does not exist")
+#     return redirect('userprofile')
+
+
+# def order_detail_view(request, order_id):
+#     try:
+#         orderview = Order.objects.get(id=order_id)
+#         address = Address.objects.get(id=orderview.address.id)
+#         products = OrderItem.objects.filter(order=order_id)
+
+#         # Fetch the first image for each variant using a subquery
+#         image_subquery = VariantImage.objects.filter(
+#             variant=OuterRef('variant')).order_by('id')
+#         products_with_images = products.annotate(
+#             first_image=Subquery(image_subquery.values('image')[:1]))
+
+#         item_status_o = Itemstatus.objects.all()
+#         orders = Order.objects.filter(user=request.user)
+
+#         context = {
+#             'orderview': orderview,
+#             'address': address,
+#             'products': products_with_images,
+#             'item_status_o': item_status_o,
+#             'orders': orders,
+#         }
+
+#         return render(request, 'userprofile/order_detail.html', context)
+#     except Order.DoesNotExist:
+#         print("Order does not exist")
+#     except Address.DoesNotExist:
+#         print("Address does not exist")
+#     return redirect('userprofile')
+
+def order_detail_view(request, view_id):
     try:
-        orderview = Order.objects.get(id=order_id)
+        orderview = Order.objects.get(id=view_id)
         address = Address.objects.get(id=orderview.address.id)
-        products = OrderItem.objects.filter(order=order_id)
+        products = OrderItem.objects.filter(order=view_id)
         variant_ids = [product.variant.id for product in products]
         image = VariantImage.objects.filter(
-            variant__id__in=variant_ids).distinct('variant__product')
+            variant__id__in=variant_ids).distinct('variant__color')
         item_status_o = Itemstatus.objects.all()
-        orders = Order.objects.filter(user=request.user)
+        cart_count = Cart.objects.filter(user=request.user).count()
+        wishlist_count = Wishlist.objects.filter(user=request.user).count()
         context = {
             'orderview': orderview,
             'address': address,
             'products': products,
             'image': image,
             'item_status_o': item_status_o,
-            'orders': orders,
+            'wishlist_count': wishlist_count,
+            'cart_count': cart_count,
 
         }
-
         return render(request, 'userprofile/order_detail.html', context)
+
     except Order.DoesNotExist:
         print("Order does not exist")
     except Address.DoesNotExist:

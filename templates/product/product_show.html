@@ -174,6 +174,132 @@
     </div><!-- End .container -->
 
 
+    <div class="container">
+        <div class="product-details-tab">
+            <ul class="nav nav-pills justify-content-center" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab"
+                        role="tab" aria-controls="product-shipping-tab" aria-selected="false">Add Your Review</a>
+                </li>
+                {% if rev_count %}
+                <li class="nav-item">
+                    <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
+                        role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews({{ rev_count }})
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab"
+                        role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews </a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+
+
+                <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
+                    aria-labelledby="product-shipping-link">
+                    <div class="product-desc-content">
+
+
+                        <form action="{% url 'add_review' %}" method="POST" id="review-form" class="refa">
+                            {% csrf_token %}
+                            <input type="hidden" class="form-control" value="{{ variant.0.variant.id }}"
+                                name="img_id" required>
+                            <input type="hidden" class="form-control" value="{{ variant.0.variant.product.id }}"
+                                name="product_id" required>
+                            <div class="form-group">
+                                <label for="">Enter Your Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Enter Your Email *</label>
+                                <input type="text" class="form-control" id="name" name="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Rate The Product *</label>
+                                <select class="form-control" id="rating" name="rating" required>
+                                    <option value="5">5 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="1">1 Star</option>
+                                </select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="">Enter Your Review About The Product *</label>
+                                <textarea class="form-control" id="review-content" name="review"
+                                    required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-primary-2">
+                                <span>SUBMIT</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div><!-- End .product-desc-content -->
+                </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
+                    aria-labelledby="product-review-link">
+                    <div class="reviews">
+                        <h3>Reviews</h3>
+                        {% for i in reviews %}
+                        <div class="review">
+                            <div class="row no-gutters">
+                                <div class="col-auto">
+                                    <h4><a href="#">{{ i.name }}</a></h4>
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            {% if i.rating == 5 %}
+                                            <div class="ratings-val" style="width: 100%;"></div>
+                                            <!-- End .ratings-val -->
+                                            {% elif i.rating == 4 %}
+                                            <div class="ratings-val" style="width: 80%;"></div>
+                                            <!-- End .ratings-val -->
+                                            {% elif i.rating == 3 %}
+
+                                            <div class="ratings-val" style="width: 60%;"></div>
+                                            <!-- End .ratings-val -->
+                                            {% elif i.rating == 2 %}
+
+                                            <div class="ratings-val" style="width: 40%;"></div>
+                                            <!-- End .ratings-val -->
+                                            {% elif i.rating == 1 %}
+
+                                            <div class="ratings-val" style="width: 20%;"></div>
+                                            <!-- End .ratings-val -->
+                                            {% else %}
+
+                                            {% endif %}
+                                        </div><!-- End .ratings -->
+                                    </div><!-- End .rating-container -->
+                                    {% comment %} <span class="review-date">5 days ago</span> {% endcomment %}
+                                </div><!-- End .col -->
+                                <div class="col">
+                                    <h4>{{ i.email }}</h4>
+
+                                    <div class="review-content">
+                                        <p> {{ i.review_text }}</p>
+                                    </div><!-- End .review-content -->
+
+                                    <div class="review-action">
+                                         <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                        <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a> 
+                                    </div><!-- End .review-action -->
+                                </div><!-- End .col-auto -->
+                            </div><!-- End .row -->
+                        </div><!-- End .review -->
+                        {% endfor %}
+                    </div><!-- End .reviews -->
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .product-details-tab -->
+    </div><!-- End .container -->
+
 
 
     </div><!-- End .page-content -->
@@ -208,7 +334,7 @@
                 if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available' || response.status === 'Product already in cart') {
                     swal.fire("Error!", response.status, "error");
                     $('.cartdata').load(location.href + " .cartdata");
-                } else if (response.status === 'Product added successfully') {
+                } else if (response.status === 'Product added successfully' || response.status === 'Quantity updated in cart' ) {
                     swal.fire("", response.status, "success");
                     $('.cartdata').load(location.href + " .cartdata");
                 } else if (response.status === 'you are not login please Login to continue') {

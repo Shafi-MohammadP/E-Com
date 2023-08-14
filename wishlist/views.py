@@ -24,12 +24,20 @@ def wishlist(request):
         quantity_dict = {variant['id']: variant['quantity']
                          for variant in variant_quantity}
         cate = category.objects.all()
+        try:
+            wishlist_count = Wishlist.objects.filter(user=request.user).count()
+            cart_count = Cart.objects.filter(user=request.user).count()
+        except:
+            wishlist_count = False
+            cart_count = False
 
         context = {
             'wishlist': wishlist,
             'img': img,
             'quantity_dict': quantity_dict,
-            'cate': cate
+            'cate': cate,
+            'wishlist_count': wishlist_count,
+            'cart_count': cart_count,
         }
         return render(request, 'wishlist/wishlist.html', context)
     else:
@@ -53,6 +61,41 @@ def add_wishlist(request):
                 return JsonResponse({'status': 'Product added successfully'})
         else:
             return JsonResponse({'status': 'you are not login please login to continue'})
+
+    return redirect('home')
+
+
+def add_wish_list(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+
+            variant_id = request.POST.get('variant_id')
+            # try:
+            #     variant_check =Variant.objects.get(id=variant_id )
+            #     if variant_check.size==add_size:
+            #         pass
+            #     else:
+            #         product=variant_check.product
+            #         color= variant_check.color
+            #         try:
+            #             check_variant=Variant.objects.get(product=product, color=color, size=add_size)
+            #             variant_id= check_variant.id
+            #         except Variant.DoesNotExist:
+            #             return JsonResponse({'status': 'Sorry! this variant not available'})
+
+            # except Variant.DoesNotExist:
+            #     return JsonResponse({'status': 'No such prodcut found'})
+
+            if Wishlist.objects.filter(user=request.user, variant_id=variant_id).exists():
+
+                return JsonResponse({'status': 'Product already in Wishlist'})
+
+            else:
+                Wishlist.objects.create(
+                    user=request.user, variant_id=variant_id)
+                return JsonResponse({'status': 'Product added successfully in Wishlist'})
+        else:
+            return JsonResponse({'status': 'you are not login please Login to continue'})
 
     return redirect('home')
 
@@ -90,24 +133,24 @@ def wish_remove(request, remove_id):
 
 #     return redirect('home')
 
-def wish_product_show(request, prod_id, img_id):
+# def wish_product_show(request, prod_id, img_id):
 
-    variant = VariantImage.objects.filter(variant=img_id)
-    variant_images = VariantImage.objects.filter(
-        variant__product__id=prod_id).distinct('variant__product')
-    color = VariantImage.objects.filter(
-        variant__product__id=prod_id).distinct('variant__color')
+#     variant = VariantImage.objects.filter(variant=img_id)
+#     variant_images = VariantImage.objects.filter(
+#         variant__product__id=prod_id).distinct('variant__product')
+#     color = VariantImage.objects.filter(
+#         variant__product__id=prod_id).distinct('variant__color')
 
-    try:
-        product_category = get_object_or_404(category, id=prod_id)
-    except category.DoesNotExist:
-        raise Http404("Category does not exist")
-    context = {
-        'variant': variant,
-        'color': color,
-        'variant_images': variant_images,
-        'product_category': product_category
-        # 'cart':cart
-    }
+#     try:
+#         product_category = get_object_or_404(category, id=prod_id)
+#     except category.DoesNotExist:
+#         raise Http404("Category does not exist")
+#     context = {
+#         'variant': variant,
+#         'color': color,
+#         'variant_images': variant_images,
+#         'product_category': product_category
+#         # 'cart':cart
+#     }
 
-    return render(request, 'product/wishproductview.html', context)
+#     return render(request, 'product/wishproductview.html', context)

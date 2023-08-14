@@ -34,8 +34,8 @@
                     </ul>
                     <div class="tab-content">
                         
-    
-                            <form action="{% url 'add_address'  %}" method="POST">
+                            {% if check %}
+                            <form action="{% url 'add_address' check  %}" method="POST">
                                 {% csrf_token %}
                                 
                                 <br>
@@ -132,4 +132,5 @@
     <!-- Plugins JS File -->
 
 </body>
+{% endif %}
 {% endblock %}

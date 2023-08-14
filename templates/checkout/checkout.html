@@ -56,7 +56,7 @@
                         <div class="col-lg-9">
                             <div class="summary">
                                 <h2 class="checkout-title">Select Delivery Address</h2><!-- End .checkout-title -->
-                                <a href="{% url 'add_address' %}" class="btn btn-outline-primary-2"><span>Add
+                                <a href="{% url 'add_address' 2%}" class="btn btn-outline-primary-2"><span>Add
                                         address</span><i class="icon-long-arrow-right"></i></a>
                                 {% for i in address %}
                                 <div class="card card-dashboard">
@@ -79,16 +79,16 @@
                                         </tr>
                                         </table>
                                         <div class="addressmgt">
-                                            <p><a href="{% url 'edit_address' i.id %}">Edit<i
+                                            {% comment %} <p><a href="{% url 'edit_address' i.id %}">Edit<i
                                                         class="fas fa-edit"></i></a>
 
-                                            </p>
+                                            </p> {% endcomment %}
                                             <p><a href="{% url 'viewaddress' i.id %}">View <i
-                                                        class="fas fa-eye"></i></a>
+                                                        class="icon-eye"></i></a>
                                             </p>
-                                            <p>
-                                            <p><a href="{% url 'deleteaddress' i.id %}"
-                                                    onclick="return confirmAction()">Delete</a> </p>
+                                            
+                                            {% comment %} <p><a href="{% url 'deleteaddress' i.id %}"
+                                                    onclick="return confirmAction()">Delete</a> </p> {% endcomment %}
                                         </div>
                                     </div><!-- End .card-body -->
                                     <br>
