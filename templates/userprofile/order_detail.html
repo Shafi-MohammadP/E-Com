@@ -140,7 +140,7 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th scope="col">image</th>
+                                            {% comment %} <th scope="col">image</th> {% endcomment %}
                                             <th scope="col">Product name</th>
                                             <th scope="col">category</th>
                                             <th scope="col">color</th>
@@ -154,7 +154,7 @@
                                     <tbody>
                                         {% for i in products  %}
                                         <tr>
-                                            {% for j in image %}
+                                            {% comment %} {% for j in image %}
                                             {% if i.variant.id == j.variant.id %}
                                             <td>
                                                 <div style="width: 30px;" class="overflow-hidden">
@@ -162,7 +162,7 @@
                                                 </div>
                                             </td>
                                             {% endif %}
-                                            {% endfor %}
+                                            {% endfor %} {% endcomment %}
 
                                             <td><b>{{ i.variant.product.product_name }}</td>
                                             <td><b>{{ i.variant.product.category.categories }}</td>

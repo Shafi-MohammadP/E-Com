@@ -15,6 +15,9 @@ urlpatterns = [
     path('change_password', views.change_password, name="change_password"),
     path('order_detail/<int:view_id>/',
          views.order_detail_view, name='order_detail'),
+    #     path('download/invoice/<int:order_id>/',
+    #          views.download_invoice, name='download_invoice'),
+
 
 
 ]

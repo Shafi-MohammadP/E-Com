@@ -12,7 +12,7 @@ from category.models import category
 from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth.password_validation import validate_password
-from django.db.models import Sum, Avg, Count
+from django.db.models import Sum, Avg, Count,  Q, Subquery, OuterRef
 # from .models import UserOTP
 import re
 import random
@@ -116,8 +116,8 @@ def product_show(request, prod_id, img_id):
 
 def shop(request):
     categories = category.objects.all()
-    # variant_images = VariantImage.objects.order_by(
-    #     'variant__product').distinct('variant__product')
+    variant_images = VariantImage.objects.order_by(
+        'variant__product').distinct('variant__product')
     variant_images = VariantImage.objects.filter(variant__product__is_available=True).order_by(
         'variant__product').distinct('variant__product')
     try:
@@ -184,3 +184,12 @@ def QuickView(request, product_id, image_id):
     }
 
     return render(request, 'popup/quickview.html', context)
+
+
+def product_list(request):
+    search_query = request.POST.getlist('search')
+    print("------------------", search_query)
+    variant_images = VariantImage.objects.filter(
+        variant__product__category__categories_in=search_query).distinct('variant__product__product_name')
+
+    return render(request, 'filter/filter.html', variant_images)

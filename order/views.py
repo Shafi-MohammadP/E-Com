@@ -29,18 +29,17 @@ def viewOrder(request, view_id):
         products = OrderItem.objects.filter(order=view_id)
         variant_ids = [product.variant.id for product in products]
         image = VariantImage.objects.filter(
-            variant__id__in=variant_ids).distinct('variant__product')
+            variant__id__in=variant_ids).distinct('variant__color')
         item_status_o = Itemstatus.objects.all()
         context = {
             'orderview': orderview,
             'address': address,
             'products': products,
             'image': image,
-            'item_status_o': item_status_o,
-
+            'item_status_o': item_status_o
         }
 
-        return render(request, 'view/order_view.html', context)
+        return render(request, 'View/order_view.html', context)
     except Order.DoesNotExist:
         print("Order does not exist")
     except Address.DoesNotExist:

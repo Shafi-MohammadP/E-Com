@@ -9,10 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth.password_validation import validate_password
 from django.shortcuts import redirect, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.utils.text import slugify
 from django.db.models import OuterRef, Subquery
 from cart.models import Cart
 from wishlist.models import Wishlist
+from django.template.loader import render_to_string
 
 # verification email
 import re
@@ -25,6 +27,7 @@ from .models import Address, Wallet
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from user.models import User
+from category.models import category
 from variant.models import Variant, VariantImage
 from django.contrib.auth import update_session_auth_hash
 # Create your views here.
@@ -33,6 +36,7 @@ from django.contrib.auth import update_session_auth_hash
 @login_required(login_url='user_login1')
 def userprofile(request):
     user = request.user
+    categories = category.objects.all()
     addresses = Address.objects.filter(user=request.user)
     orders = Order.objects.filter(user=request.user)
     walletamount = Wallet.objects.filter(user=request.user)
@@ -287,8 +291,9 @@ def editprofile(request):
 
 def deleteaddress(request, delete_id):
     address = Address.objects.get(id=delete_id)
-    address.delete()
-    messages.success(request, 'Addres deleted Successfully')
+    address.is_available = False
+    address.save()
+    messages.success(request, ' Address deleted successfully!')
     return redirect('userprofile')
 
 
@@ -492,6 +497,9 @@ def order_detail_view(request, view_id):
         address = Address.objects.get(id=orderview.address.id)
         products = OrderItem.objects.filter(order=view_id)
         variant_ids = [product.variant.id for product in products]
+        for i in variant_ids:
+            print(i, 'jhikkkkkkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+        print(variant_ids, 'sdffffffffffffffffffffffffffffffffffffffffffff')
         image = VariantImage.objects.filter(
             variant__id__in=variant_ids).distinct('variant__color')
         item_status_o = Itemstatus.objects.all()
@@ -514,3 +522,20 @@ def order_detail_view(request, view_id):
     except Address.DoesNotExist:
         print("Address does not exist")
     return redirect('userprofile')
+
+
+# def download_invoice(request, order_id):
+#     # Generate the invoice content (HTML or PDF)
+
+#     invoice_content = render_to_string(
+#         'userprofile/invoice_template.html', {'order_id': order_id})
+
+#     # Convert the HTML to PDF (you may need to use a library for this)
+#     # For simplicity, let's assume the invoice_content is already in PDF format
+
+#     # Create a response with the PDF content
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = f'attachment; filename="invoice_{slugify(order_id)}.pdf"'
+#     response.write(invoice_content)
+
+#     return response

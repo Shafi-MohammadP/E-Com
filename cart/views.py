@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from wishlist.models import Wishlist
 from .models import Cart
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # Create your views here.
 
 
@@ -58,6 +59,7 @@ def remove_cart(request, cart_id):
         cart_remove = Cart.objects.get(id=cart_id)
 
         cart_remove.delete()
+        messages.success(request, 'Product Removed Succesfully')
     except:
         return redirect('cart')
 

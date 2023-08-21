@@ -155,7 +155,7 @@
             </li><li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'order_list' %}" aria-expanded="false">
                 <span>
-                  <i class="ti ti-file-description"></i>
+                  <i class="ti ti-target"></i>
                 </span>
                 <span class="hide-menu">Orders</span>
               </a>
@@ -163,9 +163,25 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="{% url 'product_color' %}" aria-expanded="false">
                 <span>
-                  <i class="ti ti-typography"></i>
+                  <i class="ti ti-palette"></i>
                 </span>
                 <span class="hide-menu">Color</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'coupon' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-gift"></i>
+                </span>
+                <span class="hide-menu">Coupon</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'sales_report' %}" aria-expanded="false">
+                <span>
+                  <i class="ti ti-clipboard"></i>
+                </span>
+                <span class="hide-menu">Sales report</span>
               </a>
             </li>
             <li class="nav-small-cap">
@@ -238,11 +254,11 @@
             </ul>
   
             <ul class="navbar-nav">
-              {% for message in messages %}
+              {% comment %} {% for message in messages %}
               <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
                   {{ message }}
               </div>
-              {% endfor %}
+              {% endfor %} {% endcomment %}
             </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -290,6 +306,19 @@
   <script src="{% static 'dashboard/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
   <script src="{% static 'dashboard/assets/libs/simplebar/dist/simplebar.js' %}"></script>
   <script src="{% static 'dashboard/assets/js/dashboard.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+
+  {% for message in messages %}
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          Swal.fire({
+              text: "{{ message }}",
+              timer: 3000, // Adjust the timer to control how long each alert stays visible (in milliseconds)
+          });
+      });
+  </script>
+{% endfor %}
+
 </body>
 
 </html>

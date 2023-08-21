@@ -4,6 +4,24 @@
 {% block content %}
 {% load mathfilters %}
 
+<style>
+    .empty-cart {
+        text-align: center;
+        padding: 50px 0;
+    }
+    
+    .empty-cart-message {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .empty-cart-button {
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+    }
+
+</style>
 
 <main class="main">
     <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -86,9 +104,19 @@
                 </tbody>
             </table><!-- End .table table-wishlist -->
             {% else %}
-            <table class="table table-wishlist table-mobile">
-            <span class="in-stock">you have no wishlist</span>
-            </table>
+            <div class="page-content">
+                <div class="cart">
+                    <div class="container empty-cart">
+                        <h4 class="empty-cart-message">You have no Wishlist Items. Go To Shop</h4>
+                        <a href="{% url 'shop' %}" class="empty-cart-button">
+                            <button type="submit" class="btn btn-outline-primary-2 purchase placeorder">
+                                <span>Shop</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
             {% endif %}
             <div class="wishlist-share">
                 <div class="social-icons social-icons-sm mb-2">

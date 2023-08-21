@@ -7,6 +7,24 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<style>
+    .empty-cart {
+        text-align: center;
+        padding: 50px 0;
+    }
+    
+    .empty-cart-message {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    
+    .empty-cart-button {
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block;
+    }
+
+</style>
 
 {% if cart %}
 <main class="main">
@@ -108,7 +126,7 @@
                         </table><!-- End .table table-wishlist -->
                         
                         <div class="cart-bottom">
-                            <div class="cart-discount">
+                            {% comment %} <div class="cart-discount">
                                 <form action="#">
                                     <div class="input-group">
                                         <input type="text" class="form-control" required placeholder="coupon code">
@@ -118,7 +136,7 @@
                                         </div><!-- .End .input-group-append -->
                                     </div><!-- End .input-group -->
                                 </form>
-                            </div><!-- End .cart-discount -->
+                            </div><!-- End .cart-discount --> {% endcomment %}
 
                             <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
                                     class="icon-refresh"></i></a>
@@ -200,6 +218,38 @@
             </div><!-- End .container -->
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
+    {% else %}
+    <div class="page-header text-center">
+        <div class="container">
+            <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+    
+    <div class="page-content">
+        <div class="cart">
+            <div class="container empty-cart">
+                <h4 class="empty-cart-message">You have no Cart Items. Go To Shop</h4>
+                <a href="{% url 'shop' %}" class="empty-cart-button">
+                    <button type="submit" class="btn btn-outline-primary-2 purchase placeorder">
+                        <span>Shop</span>
+                        <i class="icon-long-arrow-right"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+
     <!-- Add this to the <head> section of your HTML -->
     <link rel="stylesheet" href="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.min.css">
 
@@ -252,33 +302,6 @@
     });
 
 </script>
-{% else %}
-<div class="page-header text-center">
-    <div class="container">
-        <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
-    </div><!-- End .container -->
-</div><!-- End .page-header -->
-<nav aria-label="breadcrumb" class="breadcrumb-nav">
-    <div class="container">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Shop</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
-        </ol>
-    </div><!-- End .container -->
-</nav><!-- End .breadcrumb-nav -->
-<div class="page-content">
-<div class="cart">
-    <div class="container">
-  
-    <h4>You have no Cart Itesm Go To Shop</h4>
-    <a href="{% url 'home' %}"><button type="submit" class="btn btn-outline-primary-2 purchase placeorder "
-            id="orderform"><span> Shop
-            </span><i class="icon-long-arrow-right"></i></button></a>
 
-</div>
-</div>
-
-{% endif %}
 
 {% endblock %}

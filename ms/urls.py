@@ -15,21 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('home.urls')),
-    path('user/',include('user.urls')),
-    path('admin_login/',include('dashboard.urls')),
-    path('product/',include('product.urls')),
-    path('category/',include('category.urls')),
-    path('variant/',include('variant.urls')),
-    path('userprofile/',include('userprofile.urls')),
-    path('cart/',include('cart.urls')),
-    path('checkout',include('checkout.urls')),
-    path('order',include('order.urls')),
-    path('wishlist',include('wishlist.urls'))
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path('', include('home.urls')),
+    path('user/', include('user.urls')),
+    path('admin_login/', include('dashboard.urls')),
+    path('product/', include('product.urls')),
+    path('category/', include('category.urls')),
+    path('variant/', include('variant.urls')),
+    path('userprofile/', include('userprofile.urls')),
+    path('cart/', include('cart.urls')),
+    path('checkout', include('checkout.urls')),
+    path('order', include('order.urls')),
+    path('wishlist', include('wishlist.urls')),
+    path('coupon', include('coupon.urls'))
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

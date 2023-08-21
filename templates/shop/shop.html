@@ -103,7 +103,8 @@
                     <div class="header-right">
 
                         <div class="header-search">
-                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                            <a href="#" class="search-toggle" role="button" title="Search"><i
+                                    class="icon-search"></i></a>
                             <form action="{% url 'search_view' %}" method="POST">
                                 {% csrf_token %}
                                 <div class="header-search-wrapper search-wrapper-wide">
@@ -117,24 +118,23 @@
 
 
                         {% comment %} <div class="dropdown compare-dropdown">
-                            <a href="{% url 'userprofile' %}" class="dropdown-toggle"   aria-haspopup="true"
-                                aria-expanded="false"  title="Compare Products"
-                                >
+                            <a href="{% url 'userprofile' %}" class="dropdown-toggle" aria-haspopup="true"
+                                aria-expanded="false" title="Compare Products">
                                 <i class="icon-user"></i>
                             </a>
-                        </div>  {% endcomment %}
+                        </div> {% endcomment %}
                         <div class="dropdown cart-dropdown">
-                            <a href="{% url 'userprofile' %}" class="dropdown-toggle" 
-                                aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="{% url 'userprofile' %}" class="dropdown-toggle" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-user"></i>
-                                
+
                             </a>
 
 
                         </div>
                         <div class="dropdown cart-dropdown">
-                            <a href="{% url 'wishlist' %}" class="dropdown-toggle" 
-                                aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="{% url 'wishlist' %}" class="dropdown-toggle" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-heart-o"></i>
                                 {% if wishlist_count %}
                                 <span class="cart-count">{{wishlist_count}}</span>
@@ -146,8 +146,8 @@
 
 
                         <div class="dropdown cart-dropdown">
-                            <a href="{% url 'cart' %}" class="dropdown-toggle" 
-                                aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="{% url 'cart' %}" class="dropdown-toggle" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                                 {% if cart_count %}
                                 <span class="cart-count">{{cart_count}}</span>
@@ -219,79 +219,87 @@
                     <div class="products">
                         <div class="row">
                             {% for c in variant_images %}
-                                <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
-                                    <div class="product">
-                                        <figure class="product-media">
-                                            <span class="product-label label-new">New</span>
-                                            <a href="{% url 'product_show' c.variant.product.id c.variant.id %}">
-                                                <img src="{{ c.image.url }}"
-                                                    alt="" class="product-image">
-                                            </a>
-                    
-                                            <div class="product-action-vertical">
-                                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable wish-list" data-product_id="{{ c.variant.id }}"><span>add to wishlist</span></a>
-                                            </div><!-- End .product-action -->
-                    
-                                            <div class="product-action action-icon-top">
-                                                <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
+                            <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
+                                <div class="product">
+                                    <figure class="product-media">
+                                        <span class="product-label label-new">New</span>
+                                        <a href="{% url 'product_show' c.variant.product.id c.variant.id %}">
+                                            <img src="{{ c.image.url }}" alt="" class="product-image">
+                                        </a>
+
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable wish-list"
+                                                data-product_id="{{ c.variant.id }}"><span>add to wishlist</span></a>
+                                        </div><!-- End .product-action -->
+
+                                        <div class="product-action action-icon-top">
+                                            <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
                                                 name="num-product" value="1" id="qty-input">
-                                                <div class="product-action">
-                                                    {% comment %} <input type="hidden"  value="{{ c.variant.size.id }}" id="size-input" > {% endcomment %}
-                                                <a href="" data-product_id="{{ c.variant.id }}" class="btn-product btn-cart add-to-cart-btn"><span>add to cart</span></a>
-                                                {% comment %} <a href="{% url 'Quick_view' c.variant.id %}"  class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> {% endcomment %}
+                                            <div class="product-action">
+                                                {% comment %} <input type="hidden" value="{{ c.variant.size.id }}"
+                                                    id="size-input"> {% endcomment %}
+                                                <a href="" data-product_id="{{ c.variant.id }}"
+                                                    class="btn-product btn-cart add-to-cart-btn"><span>add to
+                                                        cart</span></a>
+                                                {% comment %} <a href="{% url 'Quick_view' c.variant.id %}"
+                                                    class="btn-product btn-quickview" title="Quick view"><span>quick
+                                                        view</span></a> {% endcomment %}
                                                 <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a> -->
                                             </div><!-- End .product-action -->
-                                        </figure><!-- End .product-media -->
-                    
-                                        <div class="product-body">
-                                            <div class="product-cat">
-                                                <a href="#">{{ c.variant.product.category.categories }}</a>
-                                            </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{ c.variant.product.product_name }}</a></h3>
-                                            <div class="product-price">
-                                                ${{ c.variant.product.product_price }}
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    {% for rating in  ratings %}
-                                                  {% if c.variant.product.id == rating.id  %}
-                                                  {% if rating.avg_rating >= 4.5 %}
-                                                  <div class="ratings-val" style="width: 100%;"></div>
+                                    </figure><!-- End .product-media -->
+
+                                    <div class="product-body">
+                                        <div class="product-cat">
+                                            <a href="#">{{ c.variant.product.category.categories }}</a>
+                                        </div><!-- End .product-cat -->
+                                        <h3 class="product-title"><a
+                                                href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name }}</a></h3>
+                                                
+                                        <div class="product-price">
+                                            ${{ c.variant.product.product_price }}
+                                        </div>
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                {% for rating in ratings %}
+                                                {% if c.variant.product.id == rating.id %}
+                                                {% if rating.avg_rating >= 4.5 %}
+                                                <div class="ratings-val" style="width: 100%;"></div>
                                                 {% elif rating.avg_rating >= 3.5 %}
-                                                  <div class="ratings-val" style="width: 80%;"></div>
+                                                <div class="ratings-val" style="width: 80%;"></div>
                                                 {% elif rating.avg_rating >= 2.5 %}
-                                                  <div class="ratings-val" style="width: 60%;"></div>
+                                                <div class="ratings-val" style="width: 60%;"></div>
                                                 {% elif rating.avg_rating >= 1.5 %}
-                                                  <div class="ratings-val" style="width: 40%;"></div>
+                                                <div class="ratings-val" style="width: 40%;"></div>
                                                 {% elif rating.avg_rating >= 0.5 %}
-                                                  <div class="ratings-val" style="width: 20%;"></div>
+                                                <div class="ratings-val" style="width: 20%;"></div>
                                                 {% else %}
                                                 {% endif %}
                                                 {% endif %}
                                                 {% endfor %}
-                                                </div><!-- End .ratings -->
-                                                <span class="ratings-text"></span>
-                                            </div><!-- End .rating-container -->
-                                            <div class="product-nav product-nav-dots">
-                                                <a href="#" id="colorLink{{ forloop.counter }}"><span class="sr-only"></span></a>
-                                                <script>
-                                                    var colorCode = "{{ c.variant.color.color_code }}";
-                                                    var colorLink = document.getElementById("colorLink{{ forloop.counter }}");
-                                                    colorLink.style.background = colorCode;
-                                                </script>
-                                            </div><!-- End .product-nav -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product -->
-                                </div><!-- End .col-xxl-2 -->
+                                            </div><!-- End .ratings -->
+                                            <span class="ratings-text"></span>
+                                        </div><!-- End .rating-container -->
+                                        <div class="product-nav product-nav-dots">
+                                            <a href="#" id="colorLink{{ forloop.counter }}"><span
+                                                    class="sr-only"></span></a>
+                                            <script>
+                                                var colorCode = "{{ c.variant.color.color_code }}";
+                                                var colorLink = document.getElementById("colorLink{{ forloop.counter }}");
+                                                colorLink.style.background = colorCode;
+                                            </script>
+                                        </div><!-- End .product-nav -->
+                                    </div><!-- End .product-body -->
+                                </div><!-- End .product -->
+                            </div><!-- End .col-xxl-2 -->
                             {% endfor %}
                         </div><!-- End .row -->
-                    
+
                         <div class="load-more-container text-center">
                             <a href="#" class="btn btn-outline-darker btn-load-more">More Products <i
                                     class="icon-refresh"></i></a>
                         </div><!-- End .load-more-container -->
                     </div><!-- End .products -->
-                    
+
 
 
 
@@ -321,80 +329,86 @@
 
                                 <div class="collapse show" id="widget-1">
                                     <div class="widget-body">
-                                        <div class="filter-items filter-items-count">
-                                            {% for i in categories  %}
+                                        {% comment %} <div class="filter-items filter-items-count">
+                                            <form action="{% url 'product_list' %}" method="POST">
+                                                {% csrf_token %}
+                                                {% for category in categories %}
                                             <div class="filter-item">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-1">
-                                                    <label class="custom-control-label" for="cat-1">{{i.categories}}</label>
+                                                    <input type="checkbox" class="custom-control-input"
+                                                        id="cat-{{ category.id }}">
+                                                    <label class="custom-control-label" for="cat-{{ category.id }}">{{category.categories }}</label> {% endcomment %}
+                                                        
                                                 </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">3</span>
+                                                {% comment %} <span class="item-count">{{ category.product_count
+                                                    }}</span> {% endcomment %}
                                             </div><!-- End .filter-item -->
-                                            {% endfor %}
+                                            {% comment %} {% endfor %}
+                                                    <button class="btn btn-primary" type="submit">Filter</i></button>
+                                                
+                                            </form>
                                             
-                                        </div><!-- End .filter-items -->
+                                        </div><!-- End .filter-items --> {% endcomment %}
                                     </div><!-- End .widget-body -->
                                 </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
 
-                            
+{% comment %} 
+                                <div class="widget widget-collapsible">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true"
+                                            aria-controls="widget-3">
+                                            Colour
+                                        </a>
+                                    </h3><!-- End .widget-title -->
 
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true"
-                                        aria-controls="widget-3">
-                                        Colour
-                                    </a>
-                                </h3><!-- End .widget-title -->
+                                    <div class="collapse show" id="widget-3">
+                                        <div class="widget-body">
+                                            <div class="filter-colors">
+                                                <a href="#" style="background: #b87145;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" style="background: #f0c04a;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" style="background: #333333;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" class="selected" style="background: #cc3333;"><span
+                                                        class="sr-only">Color Name</span></a>
+                                                <a href="#" style="background: #3399cc;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" style="background: #669933;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" style="background: #f2719c;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                                <a href="#" style="background: #ebebeb;"><span class="sr-only">Color
+                                                        Name</span></a>
+                                            </div><!-- End .filter-colors -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget --> {% endcomment %}
 
-                                <div class="collapse show" id="widget-3">
-                                    <div class="widget-body">
-                                        <div class="filter-colors">
-                                            <a href="#" style="background: #b87145;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" style="background: #f0c04a;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" style="background: #333333;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" class="selected" style="background: #cc3333;"><span
-                                                    class="sr-only">Color Name</span></a>
-                                            <a href="#" style="background: #3399cc;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" style="background: #669933;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" style="background: #f2719c;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                            <a href="#" style="background: #ebebeb;"><span class="sr-only">Color
-                                                    Name</span></a>
-                                        </div><!-- End .filter-colors -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
 
-                            
 
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true"
-                                        aria-controls="widget-5">
-                                        Price
-                                    </a>
-                                </h3><!-- End .widget-title -->
+                                {% comment %} <div class="widget widget-collapsible">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true"
+                                            aria-controls="widget-5">
+                                            Price
+                                        </a>
+                                    </h3><!-- End .widget-title -->
 
-                                <div class="collapse show" id="widget-5">
-                                    <div class="widget-body">
-                                        <div class="filter-price">
-                                            <div class="filter-price-text">
-                                                Price Range:
-                                                <span id="filter-price-range"></span>
-                                            </div><!-- End .filter-price-text -->
+                                    <div class="collapse show" id="widget-5">
+                                        <div class="widget-body">
+                                            <div class="filter-price">
+                                                <div class="filter-price-text">
+                                                    Price Range:
+                                                    <span id="filter-price-range"></span>
+                                                </div><!-- End .filter-price-text -->
 
-                                            <div id="price-slider"></div><!-- End #price-slider -->
-                                        </div><!-- End .filter-price -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .sidebar-filter-wrapper -->
+                                                <div id="price-slider"></div><!-- End #price-slider -->
+                                            </div><!-- End .filter-price -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget --> {% endcomment %}
+                            </div><!-- End .sidebar-filter-wrapper -->
                     </aside><!-- End .sidebar-filter -->
                 </div><!-- End .container-fluid -->
             </div><!-- End .page-content -->
@@ -406,7 +420,8 @@
                     <div class="row">
                         <div class="col-sm-12 col-lg-4">
                             <div class="widget widget-about">
-                                <img src="{% static 'user/assets/images/logo.png' %}" alt="Footer Logo" width="105" height="25">
+                                <img src="{% static 'user/assets/images/logo.png' %}" alt="Footer Logo" width="105"
+                                    height="25">
                                 <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
                                     magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan
                                     porttitor, facilisis luctus, metus. </p>
@@ -669,40 +684,40 @@
     <script>
         $('.add-to-cart-btn').click(function (e) {
             e.preventDefault();
-    
+
             var product_id = $(this).data('product_id');
             var add_qty = $('#qty-input').val();
-    
+
             // var cart_qty = $('#pro_qty' + product_id).val();  
             $.ajax({
                 method: "POST",
                 url: "{% url 'add_cart' %}",
                 data: {
-    
+
                     'variant_id': product_id,
                     'add_qty': add_qty,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 success: function (response) {
-    
+
                     console.log(response);
-    
-    
-    
-                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
+
+
+
+                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' || response.status === 'Sorry  quantity not available') {
                         swal.fire("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully') { 
+                    } else if (response.status === 'Product added successfully') {
                         swal.fire("", response.status, "success");
                         $('.cartdata').load(location.href + " .cartdata");
                     } else if (response.status === 'you are not login please Login to continue') {
                         swal.fire("", response.status, "warning");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } 
+                    }
                     else if (response.status === 'Sorry! this variant not available') {
                         swal.fire("", response.status, "warning");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } 
+                    }
                     else {
                         swal("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");
@@ -715,7 +730,7 @@
     <script>
         $('.wish-list').click(function (e) {
             e.preventDefault();
-    
+
             var product_id = $(this).data('product_id');
             console.log(product_id, '544444444444444444444444444444')
 
@@ -723,30 +738,32 @@
                 method: "POST",
                 url: "{% url 'add_wish_list' %}",
                 data: {
-    
+
                     'variant_id': product_id,
 
-                 
+
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 success: function (response) {
-    
+
                     console.log(response);
     
-                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
+    
+    
+                    if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available') {
                         swal.fire("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully in Wishlist') { 
+                    } else if (response.status === 'Product added successfully' || response.status === 'Quantity updated in cart') {
                         swal.fire("", response.status, "success");
                         $('.cartdata').load(location.href + " .cartdata");
                     } else if (response.status === 'you are not login please Login to continue') {
                         swal.fire("", response.status, "warning");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } 
+                    }
                     else if (response.status === 'Sorry! this variant not available') {
                         swal.fire("", response.status, "warning");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } 
+                    }
                     else {
                         swal("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");
@@ -755,18 +772,19 @@
             });
         });
     </script>
-    
-    {% comment %} <script>
+
+    {% comment %}
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('q');
             const products = document.querySelectorAll('.product');
-    
+
             searchInput.addEventListener('input', function () {
                 const searchTerm = searchInput.value.toLowerCase();
-    
+
                 products.forEach(product => {
                     const productName = product.getAttribute('data-name').toLowerCase();
-    
+
                     if (productName.includes(searchTerm)) {
                         product.style.display = 'block';
                     } else {
@@ -776,7 +794,7 @@
             });
         });
     </script> {% endcomment %}
-    
+
     <!-- Add this before the closing </body> tag of your HTML -->
     <script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
 
