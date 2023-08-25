@@ -22,7 +22,10 @@ from cart.models import Cart
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from wishlist.models import Wishlist
-
+from checkout.models import Order
+from datetime import datetime, timedelta
+from django.contrib import messages, auth
+from .models import Contacts
 # Create your views here.
 
 
@@ -33,8 +36,18 @@ def home(request):
         'variant__product').distinct('variant__product')
     variant_imagess = VariantImage.objects.order_by(
         'variant__product__product_price').distinct('variant__product__product_price')
-    variant_imaagess = VariantImage.objects.filter(
-        variant__color__color_name='black').distinct()
+    # variant_imaagess = VariantImage.objects.filter(
+    #     variant__color__color_name='black').distinct()
+    inEar = VariantImage.objects.filter(
+        variant__product__category__categories='In-Ear Wireles').distinct('variant__product')
+    Neckband = VariantImage.objects.filter(
+        variant__product__category__categories='Neckband').distinct('variant__product')
+    OverEar = VariantImage.objects.filter(
+        variant__product__category__categories='Over-ear headphones').distinct('variant__product')
+    InEar_Wired = VariantImage.objects.filter(
+        variant__product__category__categories='In-Ear Wired').distinct('variant__product')
+    print(InEar_Wired)
+
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     try:
@@ -48,14 +61,15 @@ def home(request):
         'categories': categories,
         'products': products,
         'variant_images': variant_images,
-        'variant_imaagess': variant_imaagess,
         'variant_imagess': variant_imagess,
         'reviews': reviews,
         'ratings': ratings,
         'cart_count': cart_count,
         'wishlist_count': wishlist_count,
-
-
+        'inEar': inEar,
+        'InEar_Wired': InEar_Wired,
+        'OverEar': OverEar,
+        'Neckband': Neckband
 
     }
     print(wishlist_count, '6545654adssssssFfffffffffffffffffs')
@@ -197,3 +211,67 @@ def product_list(request):
         variant__product__category__categories_in=search_query).distinct('variant__product__product_name')
 
     return render(request, 'filter/filter.html', variant_images)
+
+
+@login_required(login_url='user_login1')
+def track_order(request):
+    last_order = Order.objects.filter(user=request.user).last()
+    date = last_order.created_at+timedelta(days=4)
+
+    context = {
+        'last_order': last_order,
+        'date': date
+    }
+    return render(request, 'TrackOrder/trackorder.html', context)
+
+
+def Contact_Us(request):
+
+    return render(request, 'Contact/contact.html')
+
+
+def Contact_User(request):
+    if request.method == 'POST':
+
+        name = request.POST['name']
+        email = request.POST['email']
+        phonenumber = request.POST['phonenumber']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        if (name.strip() == '' or email.strip() == '' or phonenumber.strip() == ''
+                or subject.strip() == '' or message.strip() == ''):
+            messages.error(request, 'field cannot empty!')
+            return render(request, 'Contact/contact.html')
+        email_check = validateemail(email)
+        if email_check is False:
+            messages.error(request, 'email not valid!')
+            return render(request, 'Contact/contact.html')
+        if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'), phonenumber):
+            messages.error(request, 'phonenumber should only contain numeric!')
+            return render(request, 'Contact/contact.html')
+        phonenumber_checking = len(phonenumber)
+        if not phonenumber_checking == 10:
+            messages.error(
+                request, 'phonenumber should be must contain 10digits!')
+            return render(request, 'Contact/contact.html')
+        contact = Contacts.objects.create(
+            name=name, phone_number=phonenumber, email=email, subject=subject, message=message)
+        contact.save()
+        messages.success(request, 'your contact has been submited!')
+        return render(request, 'Contact/contact.html')
+
+
+def validateemail(email):
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
+def validatepassword(new_password):
+    try:
+        validate_password(new_password)
+        return True
+    except ValidationError:
+        return False

@@ -87,7 +87,15 @@ def product_delete(request, product_id):
     if not request.user.is_superuser:
         return redirect('admin_login1')
     delete_product = Product.objects.get(id=product_id)
-    delete_product.delete()
+    variants = Variant.objects.filter(product=delete_product)
+    print(variants)
+    for variant in variants:
+        variant.is_available = False
+        variant.quantity
+        variant.save()
+
+    delete_product.is_available = False
+    delete_product.save()
     messages.success(request, 'product deleted successfully!')
     return redirect('product')
 

@@ -8,7 +8,10 @@ urlpatterns = [
     path('search_view', views.search_view, name='search_view'),
     path('QuickView/<int:product_id>/<int:image_id>',
          views.QuickView, name='quickview'),
-    path('product_list', views.product_list, name='product_list')
+    path('product_list', views.product_list, name='product_list'),
+    path('track_order', views.track_order, name='track_order'),
+    path('Contact_Us', views.Contact_Us, name='ContactUs'),
+    path('Contact_User', views.Contact_User, name='contact_user')
 
 
 

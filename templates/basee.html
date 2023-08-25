@@ -216,7 +216,7 @@
                                     
                                     <ul class="menu-vertical sf-arrows">
                                         
-                                        <li class="item-lead"><a href="#">{{i.categories}}</a></li>
+                                        <li class="item-lead"><a href="{% url 'shop' %}">{{i.categories}}</a></li>
                                     </ul><!-- End .menu-vertical -->
                                 </nav><!-- End .side-nav -->
                                 {% endfor %}
@@ -242,7 +242,7 @@
                                                             
                                                             <ul>
                                                                 {% for j in categories  %}
-                                                                <li><a href="category-list.html">{{j.categories}}</a></li>
+                                                                <li><a href="{% url 'shop' %}">{{j.categories}}</a></li>
                                                                 {% endfor %}
                                                                
                                                             </ul>
@@ -275,10 +275,10 @@
                                     </div><!-- End .megamenu megamenu-md -->
                                 </li>
                                 <li>
-                                    <a href="#" class="sf-with">Track Order</a>
+                                    <a href="{% url 'track_order' %}" class="sf-with">Track Order</a>
                                 </li>
                                 <li>
-                                    <a href="blog.html" class="sf-with">About us</a>
+                                    <a href="{% url 'ContactUs' %}" class="sf-with">About us</a>
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
@@ -348,7 +348,7 @@
                                     <li><a href="#">Sign In</a></li>
                                     <li><a href="cart.html">View Cart</a></li>
                                     <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
+                                    <li><a href="{% url 'track_order' %}">Track My Order</a></li>
                                     <li><a href="#">Help</a></li>
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
@@ -379,8 +379,9 @@
 
             <form action="{% url 'search_view' %}" method="POST" class="mobile-search">
                 {% csrf_token %}
-                <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="search" id="mobile-search" placeholder="Search in..." required>
+                <label for="q" class="sr-only">Search</label>
+                <input type="search" class="form-control" name="search" id="q"
+                                        placeholder="Search product ..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
 
@@ -401,9 +402,9 @@
                     <nav class="mobile-nav">
                         <ul class="mobile-menu">
                             <li class="active">
-                                <a href="index.html">Home</a>
+                                <a href="{% url 'home' %}">Home</a>
                             <li>
-                                <a href="category.html">Shop</a>
+                                <a href="{% url 'shop' %}">Shop</a>
                                 <ul>
                                     <!-- <li><a href="category-list.html">Shop List</a></li>
                                     <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
@@ -421,14 +422,14 @@
                                     <li><a href="#">Lookbook</a></li> -->
                                 </ul>
                             </li>
-                            <li>
+                            {% comment %} <li>
                                 <a href="product.html" class="sf-with-ul">Product</a>
+                            </li> {% endcomment %}
+                            <li>
+                                <a href="{% url 'track_order' %}">Track Order</a>
                             </li>
                             <li>
-                                <a href="#">Track Order</a>
-                            </li>
-                            <li>
-                                <a href="blog.html">About Us</a>
+                                <a href="{% url 'ContactUs' %}">About Us</a>
                             </li>
                         </ul>
                     </nav><!-- End .mobile-nav -->
@@ -437,8 +438,7 @@
                     {% for i in categories  %}
                     <nav class="mobile-cats-nav">
                         <ul class="mobile-cats-menu">
-                            <li><a class="mobile-cats-lead" href="#">{{i.categories}}</a></li>
-   
+                            <li><a class="mobile-cats-lead" href="{% url 'shop' %}">{{i.categories}}</a></li>
                         </ul><!-- End .mobile-cats-menu -->
                     </nav><!-- End .mobile-cats-nav -->
                     {% endfor %}
