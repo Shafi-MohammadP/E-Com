@@ -32,5 +32,6 @@ urlpatterns = [
     path('checkout', include('checkout.urls')),
     path('order', include('order.urls')),
     path('wishlist', include('wishlist.urls')),
-    path('coupon', include('coupon.urls'))
+    path('coupon', include('coupon.urls')),
+    path('shop_fileri', include('shop.urls'))
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

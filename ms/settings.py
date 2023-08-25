@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'order',
     'wishlist',
     'coupon',
+    'shop',
 ]
 
 MIDDLEWARE = [
@@ -132,9 +133,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_ROOT='/ms/static/'
+STATIC_ROOT = '/ms/static/'
 STATIC_URL = 'static/'
-STATICFILES_DIRS=[
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR/'static')
 ]
 
@@ -143,7 +144,7 @@ STATICFILES_DIRS=[
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' # e.g., smtp.gmail.com
+EMAIL_HOST = 'smtp.gmail.com'  # e.g., smtp.gmail.com
 EMAIL_PORT = 587  # check your SMTP provider for the correct port
 EMAIL_HOST_USER = 'shazzmohammed08@gmail.com'
 EMAIL_HOST_PASSWORD = 'ogezaoagatiecbev'

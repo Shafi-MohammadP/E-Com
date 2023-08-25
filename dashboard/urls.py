@@ -16,6 +16,7 @@ urlpatterns = [
     path('salesrepost', views.sales_report, name='sales_report'),
     path('dowload_CSC', views.Dowload_CSV, name='export_csv'),
     path('dowload_PDF', views.generate_pdf, name='Dowload_PDF'),
-
+    path('searchuser', views.search_user, name='Searching_user'),
+    path('user_status_search', views.user_status_search, name='user_status_search'),
 
 ]

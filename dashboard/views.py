@@ -120,6 +120,7 @@ def admin_signup(request):
 
 
 def usermanagement_1(request):
+
     return render(request, 'dashboard/dashboardbase.html')
 
     # return render(request,'dashboard/usermanagement.html')
@@ -428,3 +429,39 @@ def generate_pdf(request):
         pdf.ln()
     response.write(pdf.output(dest='S').encode('latin1'))
     return response
+
+
+def search_user(request):
+    search = request.POST.get('search')
+    if search is None or search.strip() == '':
+        messages.error(request, 'Fields Cannot empty')
+        return redirect('users_listing')
+
+    users = User.objects.filter(
+        Q(first_name__icontains=search) | Q(email__icontains=search))
+    if users:
+        pass
+    else:
+        users: False
+        messages.error(request, 'Search Not Found')
+        return redirect('users_listing')
+
+    return render(request, 'dashboard/usermanagement.html', {'users': users})
+
+
+def user_status_search(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name == 'Active':
+            users = User.objects.filter(is_active=True)
+            print('dsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            print(users)
+            return render(request, 'dashboard/usermanagement.html', {'users': users})
+        if name == 'Blocked':
+            users = User.objects.filter(is_active=False)
+            return render(request, 'dashboard/usermanagement.html', {'users': users})
+        if name == 'All':
+            users = User.objects.all()
+            return render(request, 'dashboard/usermanagement.html', {'users': users})
+        else:
+            return redirect('users_listing')

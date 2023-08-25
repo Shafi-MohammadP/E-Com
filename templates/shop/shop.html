@@ -32,6 +32,16 @@
     <link rel="stylesheet" href="{% static 'user/assets/css/plugins/magnific-popup/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'user/assets/css/plugins/nouislider/nouislider.css' %}">
 </head>
+<style>
+    .notfound {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    
+</style>
 
 <body>
     <div class="page-wrapper">
@@ -218,6 +228,7 @@
 
                     <div class="products">
                         <div class="row">
+                            {% if variant_images %}
                             {% for c in variant_images %}
                             <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
                                 <div class="product">
@@ -253,8 +264,8 @@
                                             <a href="#">{{ c.variant.product.category.categories }}</a>
                                         </div><!-- End .product-cat -->
                                         <h3 class="product-title"><a
-                                                href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name }}</a></h3>
-                                                
+                                                href="{% url 'product_show' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name}}</a></h3>
+
                                         <div class="product-price">
                                             ${{ c.variant.product.product_price }}
                                         </div>
@@ -293,8 +304,13 @@
                             </div><!-- End .col-xxl-2 -->
                             {% endfor %}
                         </div><!-- End .row -->
+                        {% else %}
+                        <div class="notfound">
+                            <h5> Search not found</h5>
+                        
+                            {% endif %}
 
-                        <div class="load-more-container text-center">
+                        
                             <a href="#" class="btn btn-outline-darker btn-load-more">More Products <i
                                     class="icon-refresh"></i></a>
                         </div><!-- End .load-more-container -->
@@ -312,82 +328,119 @@
 
 
 
-                    <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+                    <div class="sidebar-filter-overlay"></div>
                     <aside class="sidebar-shop sidebar-filter">
                         <div class="sidebar-filter-wrapper">
                             <div class="widget widget-clean">
-                                <label><i class="icon-close"></i>Filters</label>
-                                <a href="#" class="sidebar-filter-clear">Clean All</a>
+                                <label></i>Filters</label>
+                                <a href="{% url 'shop' %}" class="btn btn-outline-primary-2"><span>clear All</span>
+                                </a>
                             </div><!-- End .widget -->
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true"
-                                        aria-controls="widget-1">
-                                        Category
-                                    </a>
-                                </h3><!-- End .widget-title -->
+                            <form action="{% url 'Shop_Filter' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="widget widget-collapsible">
+                                    <h3 class="widget-title">
+                                        <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true"
+                                            aria-controls="widget-1">
+                                            Category
+                                        </a>
+                                    </h3><!-- End .widget-title -->
 
-                                <div class="collapse show" id="widget-1">
-                                    <div class="widget-body">
-                                        {% comment %} <div class="filter-items filter-items-count">
-                                            <form action="{% url 'product_list' %}" method="POST">
-                                                {% csrf_token %}
+                                    <div class="collapse show" id="widget-1">
+                                        <div class="widget-body">
+                                            <div class="filter-items filter-items-count">
+
+
+                                                <!-- Your category checkbox rendering code -->
                                                 {% for category in categories %}
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="cat-{{ category.id }}">
-                                                    <label class="custom-control-label" for="cat-{{ category.id }}">{{category.categories }}</label> {% endcomment %}
-                                                        
-                                                </div><!-- End .custom-checkbox -->
-                                                {% comment %} <span class="item-count">{{ category.product_count
-                                                    }}</span> {% endcomment %}
-                                            </div><!-- End .filter-item -->
-                                            {% comment %} {% endfor %}
-                                                    <button class="btn btn-primary" type="submit">Filter</i></button>
-                                                
-                                            </form>
-                                            
-                                        </div><!-- End .filter-items --> {% endcomment %}
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="{{ category.id  }}"
+                                                            name="categoryfilter"
+                                                            class="custom-control-input cat-checkbox"
+                                                            id="cat-{{ forloop.counter }}">
+                                                        <label class="custom-control-label"
+                                                            for="cat-{{ forloop.counter }}">{{ category.categories}}</label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                                {% endfor %}
 
-{% comment %} 
+                                                <!-- JavaScript to handle category checkbox behavior -->
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        // When a category checkbox is clicked
+                                                        $(".cat-checkbox").click(function () {
+                                                            // Uncheck all other category checkboxes
+                                                            if ($(this).prop("checked")) {
+                                                                // Only uncheck other category checkboxes if the current one is checked
+                                                                $(".cat-checkbox").not(this).prop("checked", false);
+                                                            }
+                                                        });
+                                                    });
+                                                </script>
+
+
+                                            </div><!-- End .filter-items -->
+                                        </div><!-- End .widget-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .widget -->
+
+
+
                                 <div class="widget widget-collapsible">
                                     <h3 class="widget-title">
                                         <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true"
                                             aria-controls="widget-3">
-                                            Colour
+                                            Color
                                         </a>
                                     </h3><!-- End .widget-title -->
 
                                     <div class="collapse show" id="widget-3">
                                         <div class="widget-body">
                                             <div class="filter-colors">
-                                                <a href="#" style="background: #b87145;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" style="background: #f0c04a;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" style="background: #333333;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" class="selected" style="background: #cc3333;"><span
-                                                        class="sr-only">Color Name</span></a>
-                                                <a href="#" style="background: #3399cc;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" style="background: #669933;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" style="background: #f2719c;"><span class="sr-only">Color
-                                                        Name</span></a>
-                                                <a href="#" style="background: #ebebeb;"><span class="sr-only">Color
-                                                        Name</span></a>
+
+
+                                                {% for color in colors %}
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="{{ color.id }}" name="colorfilter"
+                                                            class="custom-control-input color-checkbox"
+                                                            id="color-{{ forloop.counter }}">
+                                                        <label class="custom-control-label"
+                                                            for="color-{{ forloop.counter }}"><a
+                                                                class=" {% if color.color_code == '#cc3333' %}selected{% endif %}"
+                                                                style="background: {{ color.color_code }};"><a
+                                                                    href=""></a></label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                                {% endfor %}
+
+                                                <!-- JavaScript to handle checkbox behavior -->
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        // When a color checkbox is clicked
+                                                        $(".color-checkbox").click(function () {
+                                                            // Uncheck all other checkboxes
+                                                            $(".color-checkbox").not(this).prop("checked", false);
+                                                        });
+                                                    });
+                                                </script>
+
+
+
+
+
+
+
+
                                             </div><!-- End .filter-colors -->
                                         </div><!-- End .widget-body -->
                                     </div><!-- End .collapse -->
-                                </div><!-- End .widget --> {% endcomment %}
+                                </div><!-- End .widget -->
 
 
-
-                                {% comment %} <div class="widget widget-collapsible">
+                                 <!-- Inside your form -->
+                                <div class="widget widget-collapsible">
                                     <h3 class="widget-title">
                                         <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true"
                                             aria-controls="widget-5">
@@ -398,18 +451,62 @@
                                     <div class="collapse show" id="widget-5">
                                         <div class="widget-body">
                                             <div class="filter-price">
-                                                <div class="filter-price-text">
-                                                    Price Range:
-                                                    <span id="filter-price-range"></span>
-                                                </div><!-- End .filter-price-text -->
-
-                                                <div id="price-slider"></div><!-- End #price-slider -->
+                                                <!-- Price range checkboxes -->
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="0-500" name="pricefilter" class="custom-control-input price-checkbox" id="price-0-500">
+                                                        <label class="custom-control-label" for="price-0-500">
+                                                            $0 - $500
+                                                        </label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="500-1000" name="pricefilter" class="custom-control-input price-checkbox" id="price-500-1000">
+                                                        <label class="custom-control-label" for="price-500-1000">
+                                                            $500 - $1000
+                                                        </label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                    
+                                                </div><!-- End .filter-item -->
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="1000-10000" name="pricefilter" class="custom-control-input price-checkbox" id="price-1000-10000">
+                                                        <label class="custom-control-label" for="price-1000-10000">
+                                                            $1000 - $10000
+                                                        </label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                                <div class="filter-item">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" value="10000-100000" name="pricefilter" class="custom-control-input price-checkbox" id="price-10000-100000">
+                                                        <label class="custom-control-label" for="price-10000-100000">
+                                                            $10000 - $100000
+                                                        </label>
+                                                    </div><!-- End .custom-checkbox -->
+                                                </div><!-- End .filter-item -->
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        // When a color checkbox is clicked
+                                                        $(".price-checkbox").click(function () {
+                                                            // Uncheck all other checkboxes
+                                                            $(".price-checkbox").not(this).prop("checked", false);
+                                                        });
+                                                    });
+                                                </script>
+                                                <!-- Add more checkbox items for different price ranges -->
                                             </div><!-- End .filter-price -->
                                         </div><!-- End .widget-body -->
                                     </div><!-- End .collapse -->
-                                </div><!-- End .widget --> {% endcomment %}
-                            </div><!-- End .sidebar-filter-wrapper -->
-                    </aside><!-- End .sidebar-filter -->
+                                </div><!-- End .widget -->
+
+                        </div><!-- End .sidebar-filter-wrapper -->
+                        <div class="form-group"> 
+                            <button type="submit" class="btn btn-primary btn-block"> FILTER </button>
+                        </div> <!-- form-group// --><br>
+
+                        </form>
+                    </aside>
                 </div><!-- End .container-fluid -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
@@ -747,9 +844,9 @@
                 success: function (response) {
 
                     console.log(response);
-    
-    
-    
+
+
+
                     if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available') {
                         swal.fire("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");

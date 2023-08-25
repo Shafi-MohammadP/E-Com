@@ -90,6 +90,7 @@ def product_show(request, prod_id, img_id):
     reviews = ProductReview.objects.filter(product=prod_id)
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
     rev_count = ProductReview.objects.filter(product=prod_id).count()
+
     try:
         cart_count = Cart.objects.filter(user=request.user).count()
         wishlist_count = Wishlist.objects.filter(user=request.user).count()
@@ -120,6 +121,8 @@ def shop(request):
         'variant__product').distinct('variant__product')
     variant_images = VariantImage.objects.filter(variant__product__is_available=True).order_by(
         'variant__product').distinct('variant__product')
+
+    colors = Color.objects.all()
     try:
         cart_count = Cart.objects.filter(user=request.user).count()
         wishlist_count = Wishlist.objects.filter(user=request.user).count()
@@ -137,6 +140,7 @@ def shop(request):
         'wishlist_count': wishlist_count,
         'reviews': reviews,
         'ratings': ratings,
+        'colors': colors
     }
 
     return render(request, 'shop/shop.html', context)

@@ -5,7 +5,7 @@ from .models import Product, Color, ProductReview
 from variant.models import Variant, VariantImage
 # from categories.models import category
 
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.db.models.functions import TruncDay
 from django.db.models import DateField
 from django.db.models.functions import Cast
@@ -188,6 +188,29 @@ def add_review(request):
     messages.error(request, 'Invalid request method!')
 
     return redirect('product_show', product_id, img_id)
+
+
+def Product_Search(request):
+    if request.method == 'POST':
+
+        serach = request.POST.get('search')
+        print(serach, 'hfduisuifgbuybghafddddddddddddddddddddddddddddddddddddddddddddddddddguy')
+        if serach is None or serach.strip() == '':
+            messages.error(request, 'Field Cannot Empty')
+            return redirect('product')
+
+        product = Product.objects.filter(
+            Q(product_name__icontains=serach))
+
+    if product:
+        pass
+    else:
+        messages.error(request, 'Item Not Founnd')
+        return redirect('product')
+
+    categories = category.objects.all()
+
+    return render(request, 'product/products.html', {'product': product, 'categories': categories})
 
 
 # @login_required(login_url='admin_login1')

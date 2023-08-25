@@ -37,7 +37,7 @@ from django.contrib.auth import update_session_auth_hash
 def userprofile(request):
     user = request.user
     categories = category.objects.all()
-    addresses = Address.objects.filter(user=request.user)
+    addresses = Address.objects.filter(user=request.user, is_available=True)
     orders = Order.objects.filter(user=request.user)
     walletamount = Wallet.objects.filter(user=request.user)
     print(walletamount, '546sdfffffffffffffffffff')
@@ -159,6 +159,7 @@ def add_address(request, check_id):
         ads.phone = phone
         ads.email = email
         ads.state = state
+        ads.is_available = True
         ads.save()
         messages.success(request, 'Address added succesfully')
 
@@ -276,6 +277,7 @@ def edit_address(request, edit_id):
         ads.phone = phone
         ads.email = email
         ads.state = state
+        ads.is_available = True
         ads.save()
         messages.success(request, 'Address edited succesfully')
         return redirect('userprofile')
@@ -294,6 +296,7 @@ def deleteaddress(request, delete_id):
     address.is_available = False
     address.save()
     messages.success(request, ' Address deleted successfully!')
+
     return redirect('userprofile')
 
 
