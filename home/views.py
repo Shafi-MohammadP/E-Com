@@ -218,6 +218,7 @@ def product_list(request):
 
 @login_required(login_url='user_login1')
 def track_order(request):
+
     last_order = Order.objects.filter(user=request.user).last()
     date = last_order.created_at+timedelta(days=4)
 
