@@ -39,7 +39,7 @@ def user_login1(request):
                 return redirect('user_login1')
         else:
             messages.error(request, 'invalid username or passworld')
-    return render(request, 'user\login.html')
+    return render(request, 'user/login.html')
 
 
 @login_required(login_url='user_login1')
@@ -65,7 +65,7 @@ def user_signup(request):
                 return redirect('home')
             else:
                 messages.warning(request, f'you Entered a Wrong OTP')
-                return render(request, 'user\signup.html')
+                return render(request, 'user/signup.html')
         else:
 
             firstname = request.POST['fname']
@@ -86,42 +86,42 @@ def user_signup(request):
 
             if username.strip() == '' or password1.strip() == '' or password2.strip() == '' or email.strip() == '' or firstname.strip() == '':
                 messages.error(request, 'field cannot empty! ')
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             elif User.objects.filter(username=username):
                 messages.error(request, 'username alredy exist!')
                 context['pre_username'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             elif not re.match(r'^[a-zA-Z\s]*$', username):
                 messages.error(
                     request, 'Username should only contain alphabets!')
                 context['pre_username'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             elif User.objects.filter(email=email):
                 messages.error(request, 'email already exist!')
                 context['pre_email'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             elif password1 != password2:
                 messages.error(request, "password doesn't match")
                 context['pre_password1'] = ''
                 context['pre_password2'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             email_check = validateemail(email)
             if email_check is False:
                 messages.error(request, 'email not valid!')
                 context['pre_email'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             password_check = validatepassword(password1)
             if password_check is False:
                 messages.error(request, 'Enter strong password!')
                 context['pre_password1'] = ''
                 context['pre_password2'] = ''
-                return render(request, 'user\signup.html', context)
+                return render(request, 'user/signup.html', context)
 
             user = User.objects.create_user(
                 first_name=firstname, username=username, email=email, password=password1)
@@ -141,9 +141,9 @@ def user_signup(request):
 
             )
 
-            return render(request, 'user\signup.html', {'otp': True, 'user': user})
+            return render(request, 'user/signup.html', {'otp': True, 'user': user})
 
-    return render(request, 'user\signup.html')
+    return render(request, 'user/signup.html')
 
 
 def validateemail(email):
