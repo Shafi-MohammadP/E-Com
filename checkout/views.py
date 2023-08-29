@@ -124,15 +124,15 @@ def placeorder(request):
         # Retrieve the address ID from the form data
         address_id = request.POST.get('address')
         coupon = request.POST.get('couponOrder')
-        print(coupon, '6grrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
-        print(address_id, '655655555555555555555555555555555555')
+        # print(coupon, '6grrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+        # print(address_id, '655655555555555555555555555555555555')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
             return redirect('checkout')
 
         # Retrieve the selected address from the database
         address = Address.objects.get(id=address_id)
-        print(address, '656565656666666666666666666666666666666')
+        # print(address, '656565656666666666666666666666666666666')
 
         # Create a new Order instance and set its attributes
         neworder = Order()
@@ -157,32 +157,32 @@ def placeorder(request):
         for item in cart_items:
             product_price = item.variant.product.product_price
             cart_total_price += product_price * item.product_qty
-        print(cart_total_price, 'weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+        # print(cart_total_price, 'weeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
 
         session_coupon = request.session.get('coupon_session')
-        print(session_coupon, 'sfffffffffffffffffffffffffffffffff')
+        # print(session_coupon, 'sfffffffffffffffffffffffffffffffff')
         cart_total_amount = cart_total_price - session_coupon
         neworder.total_price = cart_total_amount
 
-        print(cart_total_amount, '11111111111111111111111111111111111')
+        # print(cart_total_amount, '11111111111111111111111111111111111')
 
         # Generate a unique tracking number
         track_no = random.randint(1111111, 9999999)
         while Order.objects.filter(tracking_no=track_no).exists():
             track_no = random.randint(1111111, 9999999)
         neworder.tracking_no = track_no
-        print(track_no, '22222222222222222222222222222222222222222222')
+        # print(track_no, '22222222222222222222222222222222222222222222')
 
         neworder.payment_id = generate_random_payment_id(10)
         while Order.objects.filter(payment_id=neworder.payment_id).exists():
             neworder.payment_id = generate_random_payment_id(10)
-        print(track_no, '22222222222222222222222222222222222222222222')
-        print(neworder.payment_id)
-        print(neworder.tracking_no)
-        print(neworder.address)
-        print(neworder.user)
-        print(neworder.payment_mode)
-        print(neworder.coupon)
+        # print(track_no, '22222222222222222222222222222222222222222222')
+        # print(neworder.payment_id)
+        # print(neworder.tracking_no)
+        # print(neworder.address)
+        # print(neworder.user)
+        # print(neworder.payment_mode)
+        # print(neworder.coupon)
 
         neworder.save()
 
