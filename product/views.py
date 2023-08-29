@@ -148,7 +148,7 @@ def product_view(request, product_id):
         'color_name': color_name,
         'product': product,
     }
-    return render(request, 'View/product_view.html', {'variant_list': variant_list})
+    return render(request, 'View/product_view.html', variant_list)
 
 
 def add_review(request):
