@@ -193,7 +193,7 @@ def user_login1(request):
             messages.error(request, 'invalid username or password!')
             return redirect('user_login1')
 
-    return render(request, 'user\login.html')
+    return render(request, 'user/login.html')
 
 
 @login_required(login_url='user_login1')

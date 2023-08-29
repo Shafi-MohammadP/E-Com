@@ -36,8 +36,10 @@ def home(request):
         'variant__product').distinct('variant__product')
     variant_imagess = VariantImage.objects.order_by(
         'variant__product__product_price').distinct('variant__product__product_price')
-    # variant_imaagess = VariantImage.objects.filter(
-    #     variant__color__color_name='black').distinct()
+    print(variant_imagess,
+          '------------------------------------------------------------------------')
+    variant_imaagess = VariantImage.objects.filter(
+        variant__color__color_name='black').distinct()
     inEar = VariantImage.objects.filter(
         variant__product__category__categories='In-Ear Wireles').distinct('variant__product')
     Neckband = VariantImage.objects.filter(
@@ -62,6 +64,7 @@ def home(request):
         'products': products,
         'variant_images': variant_images,
         'variant_imagess': variant_imagess,
+        'variant_imaagess': variant_imaagess,
         'reviews': reviews,
         'ratings': ratings,
         'cart_count': cart_count,

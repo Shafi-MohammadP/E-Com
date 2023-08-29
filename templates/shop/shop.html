@@ -56,7 +56,7 @@
                             <i class="icon-bars"></i>
                         </button>
 
-                        <a href="index.html" class="logo">
+                        <a href="{% url 'home' %}" class="logo">
                             <img src="{% static 'user/assets/images/logo.png' %}" alt="Molla Logo" width="105"
                                 height="25">
                         </a>
@@ -545,11 +545,11 @@
                                 <h4 class="widget-title">Information</h4><!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="about.html">About Molla</a></li>
+                                    <li><a href="{% url 'ContactUs' %}">About Molla</a></li>
                                     <li><a href="#">How to shop on Molla</a></li>
-                                    <li><a href="faq.html">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
-                                    <li><a href="login.html">Log in</a></li>
+                                    <li><a href="">FAQ</a></li>
+                                    <li><a href="{% url 'ContactUs' %}">Contact us</a></li>
+                                    <li><a href="{% url 'user_login1' %}">Log in</a></li>
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
                         </div><!-- End .col-sm-4 col-lg-2 -->
@@ -575,9 +575,9 @@
 
                                 <ul class="widget-list">
                                     <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
+                                    <li><a href="{% url 'cart' %}">View Cart</a></li>
                                     <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
+                                    <li><a href="{% url 'track_order' %}">Track My Order</a></li>
                                     <li><a href="#">Help</a></li>
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
