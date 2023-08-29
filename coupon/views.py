@@ -124,7 +124,7 @@ def edit_coupon(request, coupon_id):
             return redirect('coupon')
         if start_date < timezone.now().date():
             messages.error(
-                request, 'I know You are samart But dont Be OverSmart')
+                request, 'Ending date after the strating date')
             return redirect('coupon')
 
         coupon_edit = Coupon.objects.get(id=coupon_id)
