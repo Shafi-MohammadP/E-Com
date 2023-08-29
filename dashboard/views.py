@@ -102,6 +102,7 @@ def admin_signup(request):
                 username=username, email=email, password=password1)
             user.is_active = False
             user.is_superuser = True
+            user.is_staff = True
             user.save()
             user_otp = random.randint(100000, 999999)
             UserOTP.objects.create(user=user, otp=user_otp)
