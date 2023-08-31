@@ -224,14 +224,19 @@ def track_order(request):
 
     context = {
         'last_order': last_order,
-        'date': date
+        'date': date,
+        'active_page': 'track_order'
+
     }
     return render(request, 'TrackOrder/trackorder.html', context)
 
 
 def Contact_Us(request):
+    context = {
+        'active_page': 'about_us'
+    }
 
-    return render(request, 'Contact/contact.html')
+    return render(request, 'Contact/contact.html', {'active_page': context})
 
 
 def Contact_User(request):

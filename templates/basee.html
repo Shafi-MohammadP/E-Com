@@ -225,7 +225,7 @@
                     <div class="header-center">
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
-                                <li class="megamenu-container active">
+                                <li class="{% if active_page == 'home' %}active{% endif %}">
                                     <a href="{% url 'home' %}" class="sf-with">Home</a>
                                 </li>
                                 <li>
@@ -272,10 +272,10 @@
                                         </div><!-- End .row -->
                                     </div><!-- End .megamenu megamenu-md -->
                                 </li>
-                                <li>
+                                <li class="{% if active_page == 'track_order' %}active{% endif %}">
                                     <a href="{% url 'track_order' %}" class="sf-with">Track Order</a>
                                 </li>
-                                <li>
+                                <li class="{% if active_page == 'about_us' %}active{% endif %}">
                                     <a href="{% url 'ContactUs' %}" class="sf-with">About us</a>
                                 </li>
                             </ul><!-- End .menu -->

@@ -16,50 +16,43 @@
                         <div class="form-tab">
                             <ul class="nav nav-pills nav-fill" role="tablist">
                                 <li class="nav-item">
-                                    {% for message in messages %}
-                                    <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
-                                        {{ message }}
-                                    </div>
-                                    {% endfor %} <br>
+                                    
 
                                     <h4> <strong>Edit Address</strong></h4>
                                 </li>
 
                             </ul>
                             <div class="tab-content">
+                                {% if editaddress  %}
 
-                                <form action="{% url 'edit_address' edit_id %}" method="POST">
+                                <form action="{% url 'edit_address' editaddress.id  %}" method="POST">
                                     {% csrf_token %}
-                                    {% for message in messages %}
-                                    <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
-                                        {{ message }}
-                                    </div>
-                                    {% endfor %}
+                                   
 
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label>First Name *</label>
                                             <input type="text" class="form-control" name="firstname"
-                                                value="{{pre_first_name}}">
+                                                value="{{editaddress.first_name}}">
                                         </div><!-- End .col-sm-6 -->
 
                                         <div class="col-sm-6">
                                             <label>Last Name *</label>
                                             <input type="text" class="form-control" name="lastname"
-                                                value="{{pre_last_name}}">
+                                                value="{{editaddress.last_name}}">
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->
 
                                     <label>Mobile NO *</label>
-                                    <input type="text" class="form-control" name="phone" value="{{pre_phone}}">
+                                    <input type="text" class="form-control" name="phone" value="{{editaddress.phone}}">
 
 
                                     <label>Email address *</label>
-                                    <input type="email" class="form-control" name="email" value="{{pre_email}}">
+                                    <input type="email" class="form-control" name="email" value="{{editaddress.email}}">
 
 
                                     <label>Address *</label>
-                                    <input type="text" class="form-control" name="address" value="{{pre_address}}">
+                                    <input type="text" class="form-control" name="address" value="{{editaddress.address}}">
 
 
 
@@ -67,25 +60,25 @@
                                         <div class="col-sm-6">
                                             <label>Country *</label>
                                             <input type="text" class="form-control" name="country"
-                                                value="{{pre_country}}">
+                                                value="{{editaddress.country}}">
                                         </div><!-- End .col-sm-6 -->
 
                                         <div class="col-sm-6">
                                             <label>CITY *</label>
-                                            <input type="text" class="form-control" name="city" value="{{pre_city}}">
+                                            <input type="text" class="form-control" name="city" value="{{editaddress.city}}">
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->
 
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label>State *</label>
-                                            <input type="text" class="form-control" name="state" value="{{pre_state}}">
+                                            <input type="text" class="form-control" name="state" value="{{editaddress.state}}">
                                         </div><!-- End .col-sm-6 -->
 
                                         <div class="col-sm-6">
                                             <label>PIN CODE *</label>
                                             <input type="text" class="form-control" name="pincode"
-                                                value="{{pre_pincode}}">
+                                                value="{{editaddress.pincode}}">
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->
                                     <div class="row">
@@ -103,7 +96,7 @@
                                         </div>
                                     </div>
                                 </form>
-
+                                {% endif %}
 
                             </div><!-- End .tab-content -->
                         </div><!-- End .form-tab -->
