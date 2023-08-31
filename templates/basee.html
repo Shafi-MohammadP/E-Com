@@ -343,9 +343,9 @@
                                 <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
+                                    <li><a href="{% url 'user_login1' %}">Sign In</a></li>
                                     <li><a href="{% url 'cart' %}">View Cart</a></li>
-                                    <li><a href="#">My Wishlist</a></li>
+                                    <li><a href="{% url 'wishlist' %}">My Wishlist</a></li>
                                     <li><a href="{% url 'track_order' %}">Track My Order</a></li>
                                     <li><a href="#">Help</a></li>
                                 </ul><!-- End .widget-list -->
@@ -405,21 +405,9 @@
                                 <a href="{% url 'shop' %}">Shop</a>
                                 <ul>
                                     {% for i in  categories %}
-                                    <li><a href="{% url 'shop' %}">{{i.categories}}</a></li>
+                                    <li><a href="{% url 'catefilter' i.id %}">{{i.categories}}</a></li>
                                     {% endfor %}
-                                    <!-- <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                    <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                    <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span
-                                                    class="tip tip-hot">Hot</span></span></a></li>
-                                    <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
-                                    <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span
-                                                    class="tip tip-new">New</span></span></a></li>
-                                    <li><a href="cart.html">Cart</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                    <li><a href="#">Lookbook</a></li> -->
+                                   
                                 </ul>
                             </li>
                             {% comment %} <li>
@@ -438,7 +426,7 @@
                     {% for i in categories  %}
                     <nav class="mobile-cats-nav">
                         <ul class="mobile-cats-menu">
-                            <li><a class="mobile-cats-lead" href="{% url 'shop' %}">{{i.categories}}</a></li>
+                            <li><a class="mobile-cats-lead" href="{% url 'catefilter' i.id %}">{{i.categories}}</a></li>
                         </ul><!-- End .mobile-cats-menu -->
                     </nav><!-- End .mobile-cats-nav -->
                     {% endfor %}

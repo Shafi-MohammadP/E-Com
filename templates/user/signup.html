@@ -59,7 +59,7 @@
                                     aria-labelledby="register-tab-2">
                                     <form action="{% url 'user_signup' %}" method="POST">
                                         {% csrf_token %}
-                                        
+
 
                                         <div class="form-group">
                                             <label for="singin-email-2">Fullname *</label>
@@ -92,32 +92,35 @@
                                             {% comment %} <button type="submit" class="btn btn-primary btn-block">
                                                 Register
                                             </button> {% endcomment %}
-                                            <div class="form-footer">
+                                            {% comment %} <div class="form-footer"> {% endcomment %}
                                                 <div class="row">
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-6">
                                                         <a> <button type="submit"
-                                                                class="btn btn-outline-primary btn-block"> LOG IN
+                                                                class="btn btn-outline-primary btn-block"> SIGN UP
                                                             </button>
                                                         </a>
                                                     </div>
-                                                    {% comment %} <div class="col-md-3">
-                                                        <a href="{% url 'user_login1' %}l"> <button 
-                                                                class="btn btn-outline-primary btn-block"> BACK
-                                                            </button>
-                                                        </a>
+                                                    {% comment %} <div class="col-md-6">
+                                                        <a href="{% url 'user_login1' %}"> <button
+                                                            class="btn btn-outline-primary btn-block"> BACKsd
+                                                        </button>
+                                                    </a>
                                                     </div> {% endcomment %}
                                                 </div>
-                                            </div>
+                                                {% comment %}
+                                            </div> {% endcomment %}
 
                                         </div><!-- End .form-footer -->
 
                                 </div> <!-- form-group// -->
                                 </form>
+                                <hr style="height: 1px; width: 100%; background-color: grey;">
+
                                 <div class="form-choice">
-                                    <a href="{% url 'user_login1' %}"> <button 
-                                        class="btn btn-outline-primary btn-block"> BACK
-                                    </button>
-                                </a>
+                                    <a href="{% url 'user_login1' %}"> <button
+                                            class="btn btn-outline-primary btn-block"> BACK
+                                        </button>
+                                    </a>
 
                                 </div><!-- End .form-choice -->
                             </div><!-- .End .tab-pane -->

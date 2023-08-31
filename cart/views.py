@@ -68,8 +68,10 @@ def remove_cart(request, cart_id):
 # @login_required(login_url='user_login1')
 
 
+# @login_required(login_url='user_login1')
 def add_cart(request):
     if request.method == 'POST':
+
         if request.user.is_authenticated:
 
             variant_id = request.POST.get('variant_id')
@@ -109,6 +111,7 @@ def add_cart(request):
                 else:
                     return JsonResponse({'status': "Sorry  quantity not available"})
         else:
+
             return JsonResponse({'status': 'you are not login please Login to continue'})
 
     return redirect('home')
@@ -138,3 +141,9 @@ def update_cart(request):
             else:
                 return JsonResponse({'status': 'Not allowed this Quantity'})
     return JsonResponse('something went wrong, reload page', safe=False)
+
+
+
+
+
+

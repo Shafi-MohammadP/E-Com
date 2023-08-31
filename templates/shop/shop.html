@@ -867,7 +867,10 @@
                         swal.fire("", response.status, "success");
                         $('.cartdata').load(location.href + " .cartdata");
                     } else if (response.status === 'you are not login please Login to continue') {
-                        swal.fire("", response.status, "warning");
+                        swal.fire("", response.status, "warning").then(() => {
+                            // Perform the page redirection here
+                            window.location.href = "{% url 'user_login1' %}";
+                        });
                         $('.cartdata').load(location.href + " .cartdata");
                     }
                     else if (response.status === 'Sorry! this variant not available') {

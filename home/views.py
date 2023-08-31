@@ -45,7 +45,7 @@ def home(request):
     OverEar = VariantImage.objects.filter(
         variant__product__category__categories='Over-ear headphones').distinct('variant__product')
     InEar_Wired = VariantImage.objects.filter(
-        variant__product__category__categories='In-Ear Wired').distinct('variant__product')
+        variant__product__category__categories='WiredIN-Ear').distinct('variant__product')
 
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
@@ -69,7 +69,8 @@ def home(request):
         'inEar': inEar,
         'InEar_Wired': InEar_Wired,
         'OverEar': OverEar,
-        'Neckband': Neckband
+        'Neckband': Neckband,
+        'active_page': 'home'
 
     }
 
@@ -227,8 +228,10 @@ def track_order(request):
 
 
 def Contact_Us(request):
+    categories = category.objects.all()
     context = {
-        'active_page': 'about_us'
+        'active_page': 'about_us',
+        'categories': categories,
     }
 
     return render(request, 'Contact/contact.html',  context)
