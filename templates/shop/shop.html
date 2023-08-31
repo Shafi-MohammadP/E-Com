@@ -124,6 +124,15 @@
                                     <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
                                 </div><!-- End .header-search-wrapper -->
                             </form>
+                            {% comment %} <form action="{% url 'search_view' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="header-search-wrapper search-wrapper-wide">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="search" id="q"
+                                        placeholder="Search product ..." required>
+                                        <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                </div><!-- End .header-search-wrapper -->
+                            </form> {% endcomment %}
                         </div><!-- End .header-search -->
 
 
@@ -668,8 +677,10 @@
                             <li>
                                 <a href="{% url 'shop' %}">Shop</a>
                                 <ul>
-                                    <!-- <li><a href="category-list.html">Shop List</a></li>
-                                    <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
+                                    {% for i in categories  %}
+                                    <li><a href="{% url 'catefilter' i.id %}">{{i.categories}}</a></li>
+                                    {% endfor %}
+                                    <!-- <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
                                     <li><a href="category.html">Shop Grid 3 Columns</a></li>
                                     <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
                                     <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span
@@ -696,15 +707,6 @@
                         </ul>
                     </nav><!-- End .mobile-nav -->
                 </div><!-- .End .tab-pane -->
-                <div class="tab-pane fade" id="mobile-cats-tab" role="tabpanel" aria-labelledby="mobile-cats-link">
-                    {% for i in categories  %}
-                    <nav class="mobile-cats-nav">
-                        <ul class="mobile-cats-menu">
-                            <li><a class="mobile-cats-lead" href="#">{{i.categories}}</a></li>
-                        </ul><!-- End .mobile-cats-menu -->
-                    </nav><!-- End .mobile-cats-nav -->
-                    {% endfor %}
-                </div><!-- .End .tab-pane -->
             </div><!-- End .tab-content -->
             
 
@@ -720,7 +722,7 @@
     <!-- Sign in / Register Modal -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
+    {% comment %} <script>
         $('.add-to-cart-btn').click(function (e) {
             e.preventDefault();
 
@@ -765,7 +767,7 @@
             });
         });
     </script>
-
+    {% endcomment %}
     <script>
         $('.wish-list').click(function (e) {
             e.preventDefault();
@@ -789,10 +791,10 @@
 
 
 
-                    if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available') {
+                    if (response.status === 'No such prodcut found' || response.status === 'Product already in Wishlist') {
                         swal.fire("Error!", response.status, "error");
                         $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully' || response.status === 'Quantity updated in cart') {
+                    } else if (response.status === 'Product added successfully in wishlist' || response.status === 'Quantity updated in cart') {
                         swal.fire("", response.status, "success");
                         $('.cartdata').load(location.href + " .cartdata");
                     } else if (response.status === 'you are not login please Login to continue') {
@@ -810,7 +812,7 @@
                 }
             });
         });
-    </script>
+    </script> 
 
     {% comment %}
     <script>
@@ -833,6 +835,53 @@
             });
         });
     </script> {% endcomment %}
+    <script>
+        $('.add-to-cart-btn').click(function (e) {
+            e.preventDefault();
+    
+            var product_id = $(this).data('product_id');
+            var add_qty = $('#qty-input').val();
+    
+            // var cart_qty = $('#pro_qty' + product_id).val();  
+            
+            console.log(product_id, add_qty, 'wetsssssssssssssssssssssssssssssssssssss')
+            $.ajax({
+                method: "POST",
+                url: "{% url 'add_cart' %}",
+                data: {
+    
+                    'variant_id': product_id,
+                    'add_qty': add_qty,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function (response) {
+    
+                    console.log(response);
+    
+    
+    
+                    if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available' || response.status === 'Product already in cart') {
+                        swal.fire("Error!", response.status, "error");
+                        $('.cartdata').load(location.href + " .cartdata");
+                    } else if (response.status === 'Product added successfully' || response.status === 'Quantity updated in cart') {
+                        swal.fire("", response.status, "success");
+                        $('.cartdata').load(location.href + " .cartdata");
+                    } else if (response.status === 'you are not login please Login to continue') {
+                        swal.fire("", response.status, "warning");
+                        $('.cartdata').load(location.href + " .cartdata");
+                    }
+                    else if (response.status === 'Sorry! this variant not available') {
+                        swal.fire("", response.status, "warning");
+                        $('.cartdata').load(location.href + " .cartdata");
+                    }
+                    else {
+                        swal("Error!", response.status, "error");
+                        $('.cartdata').load(location.href + " .cartdata");
+                    }
+                }
+            });
+        });
+    </script>
 
     <!-- Add this before the closing </body> tag of your HTML -->
     <script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>

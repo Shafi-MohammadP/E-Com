@@ -58,7 +58,7 @@ def add_wishlist(request):
                 var = Variant.objects.get(id=variant_id)
                 Wishlist.objects.create(user=request.user, variant=var)
 
-                return JsonResponse({'status': 'Product added successfully'})
+                return JsonResponse({'status': 'Product added successfully in wishlist'})
         else:
             return JsonResponse({'status': 'you are not login please login to continue'})
 
@@ -93,7 +93,7 @@ def add_wish_list(request):
             else:
                 Wishlist.objects.create(
                     user=request.user, variant_id=variant_id)
-                return JsonResponse({'status': 'Product added successfully in Wishlist'})
+                return JsonResponse({'status': 'Product added successfully in wishlist'})
         else:
             return JsonResponse({'status': 'you are not login please Login to continue'})
 

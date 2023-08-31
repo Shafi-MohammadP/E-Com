@@ -36,8 +36,6 @@ def home(request):
         'variant__product').distinct('variant__product')
     variant_imagess = VariantImage.objects.order_by(
         'variant__product__product_price').distinct('variant__product__product_price')
-    print(variant_imagess,
-          '------------------------------------------------------------------------')
     variant_imaagess = VariantImage.objects.filter(
         variant__color__color_name='black').distinct()
     inEar = VariantImage.objects.filter(
@@ -48,7 +46,6 @@ def home(request):
         variant__product__category__categories='Over-ear headphones').distinct('variant__product')
     InEar_Wired = VariantImage.objects.filter(
         variant__product__category__categories='In-Ear Wired').distinct('variant__product')
-    print(InEar_Wired)
 
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
@@ -75,8 +72,6 @@ def home(request):
         'Neckband': Neckband
 
     }
-    print(wishlist_count, '6545654adssssssFfffffffffffffffffs')
-    print(cart_count, '6545654adssssssFfffffffffffffffffs')
 
     return render(request, 'home.html', context)
 
@@ -165,7 +160,6 @@ def shop(request):
 
 def search_view(request):
     search_query = request.POST.get('search')
-    print("------------------", search_query)
     variant_images = VariantImage.objects.filter(
         variant__product__product_name__icontains=search_query, is_available=True).distinct('variant__product__product_name')
     # ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
@@ -209,7 +203,6 @@ def QuickView(request, product_id, image_id):
 
 def product_list(request):
     search_query = request.POST.getlist('search')
-    print("------------------", search_query)
     variant_images = VariantImage.objects.filter(
         variant__product__category__categories_in=search_query).distinct('variant__product__product_name')
 
@@ -221,11 +214,13 @@ def track_order(request):
 
     last_order = Order.objects.filter(user=request.user).last()
     date = last_order.created_at+timedelta(days=4)
+    categories = category.objects.all()
 
     context = {
         'last_order': last_order,
         'date': date,
-        'active_page': 'track_order'
+        'active_page': 'track_order',
+        'categories': categories
 
     }
     return render(request, 'TrackOrder/trackorder.html', context)
@@ -236,7 +231,7 @@ def Contact_Us(request):
         'active_page': 'about_us'
     }
 
-    return render(request, 'Contact/contact.html', {'active_page': context})
+    return render(request, 'Contact/contact.html',  context)
 
 
 def Contact_User(request):

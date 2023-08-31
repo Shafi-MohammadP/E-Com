@@ -68,3 +68,36 @@ def Shop_Filtering(request):
     }
 
     return render(request, 'shop/shop.html', context)
+
+
+def category_filtering(request, cate_id):
+    categories = category.objects.all()
+    variant_images = VariantImage.objects.order_by(
+        'variant__product').distinct('variant__product')
+
+    colors = Color.objects.all()
+    try:
+        cart_count = Cart.objects.filter(user=request.user).count()
+        wishlist_count = Wishlist.objects.filter(user=request.user).count()
+    except:
+        cart_count = False
+        wishlist_count = False
+
+    reviews = ProductReview.objects.all()
+    ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
+    cate = category.objects.get(id=cate_id)
+    variant_images = VariantImage.objects.filter(
+        variant__product__category_id=cate).order_by(
+        'variant__product').distinct('variant__product')
+
+    context = {
+        'categories': categories,
+        'variant_images': variant_images,
+        'cart_count': cart_count,
+        'wishlist_count': wishlist_count,
+        'reviews': reviews,
+        'ratings': ratings,
+        'colors': colors
+    }
+
+    return render(request, 'shop/shop.html', context)
