@@ -39,7 +39,7 @@ def viewOrder(request, view_id):
             'item_status_o': item_status_o
         }
 
-        return render(request, 'View/order_view.html', context)
+        return render(request, 'view/order_view.html', context)
     except Order.DoesNotExist:
         print("Order does not exist")
     except Address.DoesNotExist:

@@ -47,7 +47,7 @@ def Shop_Filtering(request):
 
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
-    categories = category.objects.all()
+    categories = category.objects.filter(is_available=True)
     colors = Color.objects.all()
     try:
         cart_count = Cart.objects.filter(user=request.user).count()
@@ -71,7 +71,7 @@ def Shop_Filtering(request):
 
 
 def category_filtering(request, cate_id):
-    categories = category.objects.all()
+    categories = category.objects.filter(is_available=True)
     variant_images = VariantImage.objects.order_by(
         'variant__product').distinct('variant__product')
 

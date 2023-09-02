@@ -30,7 +30,7 @@ from .models import Contacts
 
 
 def home(request):
-    categories = category.objects.all()
+    categories = category.objects.filter(is_available=True)
     products = Product.objects.all()
     variant_images = VariantImage.objects.order_by(
         'variant__product').distinct('variant__product')
@@ -44,8 +44,15 @@ def home(request):
         variant__product__category__categories='Neckband').distinct('variant__product')
     OverEar = VariantImage.objects.filter(
         variant__product__category__categories='Over-ear headphones').distinct('variant__product')
+
     InEar_Wired = VariantImage.objects.filter(
-        variant__product__category__categories='WiredIN-Ear').distinct('variant__product')
+        variant__product__category__categories='WiredIN-Ear',
+        # Only consider available categories
+        variant__product__category__is_available=True
+    ).exclude(
+        # Exclude products with unavailable categories
+        Q(variant__product__category__is_available=False)
+    ).distinct('variant__product')
 
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
@@ -129,7 +136,7 @@ def product_show(request, prod_id, img_id):
 
 
 def shop(request):
-    categories = category.objects.all()
+    categories = category.objects.filter(is_available=True)
     variant_images = VariantImage.objects.order_by(
         'variant__product').distinct('variant__product')
     variant_images = VariantImage.objects.filter(variant__product__is_available=True).order_by(
@@ -215,7 +222,7 @@ def track_order(request):
 
     last_order = Order.objects.filter(user=request.user).last()
     date = last_order.created_at+timedelta(days=4)
-    categories = category.objects.all()
+    categories = category.objects.filter(is_avaialble=True)
 
     context = {
         'last_order': last_order,
@@ -228,7 +235,7 @@ def track_order(request):
 
 
 def Contact_Us(request):
-    categories = category.objects.all()
+    categories = category.objects.filter(is_available=True)
     context = {
         'active_page': 'about_us',
         'categories': categories,

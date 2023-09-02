@@ -371,7 +371,7 @@
         console.log(product_id, 'wetsssssssssssssssssssssssssssssssssssss')
         $.ajax({
             method: "POST",
-            url: "{% url 'add_wishlist' %}",
+            url: "{% url 'add_wish_list' %}",
             data: {
 
                 'variant_id': product_id,
@@ -386,11 +386,15 @@
                 if (response.status === 'No such prodcut found' || response.status === 'Sorry  quantity not available' || response.status === 'Product already in wishlist') {
                     swal.fire("Error!", response.status, "error");
                     $('.cartdata').load(location.href + " .cartdata");
-                } else if (response.status === 'Product added successfully') {
+                } else if (response.status === 'Product added successfully in wishlist') {
                     swal.fire("", response.status, "success");
                     $('.cartdata').load(location.href + " .cartdata");
                 } else if (response.status === 'you are not login please Login to continue') {
-                    swal.fire("", response.status, "warning");
+                    swal.fire("", response.status, "warning").then(() => {
+                        // Perform the page redirection here
+                        window.location.href = "{% url 'user_login1' %}";
+                    });
+                    
                     $('.cartdata').load(location.href + " .cartdata");
                 }
                 else if (response.status === 'Sorry! this variant not available') {
