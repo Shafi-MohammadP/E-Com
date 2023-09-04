@@ -39,20 +39,14 @@ def home(request):
     variant_imaagess = VariantImage.objects.filter(
         variant__color__color_name='black').distinct()
     inEar = VariantImage.objects.filter(
-        variant__product__category__categories='In-Ear Wireles').distinct('variant__product')
+        variant__product__category__id=3, variant__product__category__is_available=True).exclude(Q(variant__product__category__is_available=False)).distinct('variant__product')
     Neckband = VariantImage.objects.filter(
-        variant__product__category__categories='Neckband').distinct('variant__product')
+        variant__product__category__id=1, variant__product__category__is_available=True).exclude(Q(variant__product__category__is_available=False)).distinct('variant__product')
     OverEar = VariantImage.objects.filter(
-        variant__product__category__categories='Over-ear headphones').distinct('variant__product')
+        variant__product__category__id=2, variant__product__category__is_available=True).exclude(Q(variant__product__category__is_available=False)).distinct('variant__product')
 
     InEar_Wired = VariantImage.objects.filter(
-        variant__product__category__categories='WiredIN-Ear',
-        # Only consider available categories
-        variant__product__category__is_available=True
-    ).exclude(
-        # Exclude products with unavailable categories
-        Q(variant__product__category__is_available=False)
-    ).distinct('variant__product')
+        variant__product__category__id=4, variant__product__category__is_available=True).exclude(Q(variant__product__category__is_available=False)).distinct('variant__product')
 
     reviews = ProductReview.objects.all()
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
@@ -222,7 +216,7 @@ def track_order(request):
 
     last_order = Order.objects.filter(user=request.user).last()
     date = last_order.created_at+timedelta(days=4)
-    categories = category.objects.filter(is_avaialble=True)
+    categories = category.objects.filter(is_available=True)
 
     context = {
         'last_order': last_order,

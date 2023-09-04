@@ -231,7 +231,7 @@
                                 <li>
                                     <a href="{% url 'shop' %}" class="sf">Shop</a>
 
-                                    <div class="megamenu megamenu-md">
+                                    {% comment %} <div class="megamenu megamenu-md">
                                         <div class="row no-gutters">
                                             <div class="col-md-8">
                                                 <div class="menu-col">
@@ -270,13 +270,13 @@
                                                 </div><!-- End .banner banner-overlay -->
                                             </div><!-- End .col-md-4 -->
                                         </div><!-- End .row -->
-                                    </div><!-- End .megamenu megamenu-md -->
+                                    </div><!-- End .megamenu megamenu-md --> {% endcomment %}
                                 </li>
                                 <li class="{% if active_page == 'track_order' %}active{% endif %}">
                                     <a href="{% url 'track_order' %}" class="sf-with">Track Order</a>
                                 </li>
                                 <li class="{% if active_page == 'about_us' %}active{% endif %}">
-                                    <a href="{% url 'ContactUs' %}" class="sf-with">About us</a>
+                                    <a href="{% url 'ContactUs' %}" class="sf-with">Contact Us</a>
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
@@ -417,7 +417,7 @@
                                 <a href="{% url 'track_order' %}">Track Order</a>
                             </li>
                             <li>
-                                <a href="{% url 'ContactUs' %}">About Us</a>
+                                <a href="{% url 'ContactUs' %}">Contact Us</a>
                             </li>
                         </ul>
                     </nav><!-- End .mobile-nav -->
