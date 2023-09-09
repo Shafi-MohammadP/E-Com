@@ -466,3 +466,38 @@ def user_status_search(request):
             return render(request, 'dashboard/usermanagement.html', {'users': users})
         else:
             return redirect('users_listing')
+
+
+def oeder_search(request):
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        if search is None or search.strip() == '':
+            messages.error(request, 'Filed is empty')
+            return redirect('order_list')
+
+        order = Order.objects.filter(
+            Q(user__first_name__icontains=search) | Q(user__last_name__icontains=search) | Q(payment_mode__icontains=search))
+        if order:
+            pass
+        else:
+            order = False
+            messages.error(request, 'Search not found')
+            return redirect('order_list')
+        return render(request, 'dashboard/order.html', {'order': order})
+
+
+def order_status_search(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        if name == 'Delivered':
+            order = Order.objects.filter(order_status__order_status=name)
+
+            return render(request, 'dashboard/order.html', {'order': order})
+        if name == 'Blocked':
+            users = User.objects.filter(is_active=False)
+            return render(request, 'dashboard/usermanagement.html', {'users': users})
+        if name == 'All':
+            users = User.objects.all()
+            return render(request, 'dashboard/usermanagement.html', {'users': users})
+        else:
+            return redirect('users_listing')

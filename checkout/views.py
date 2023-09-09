@@ -223,4 +223,8 @@ def razarypaycheck(request):
     total_price = 0
     for item in cart:
         total_price = total_price + item.variant.product.product_price * item.product_qty
+
+    session_coupon = request.session.get('coupon_session')
+    total_price = total_price - session_coupon
+
     return JsonResponse({'total_price': total_price})

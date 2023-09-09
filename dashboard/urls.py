@@ -18,5 +18,8 @@ urlpatterns = [
     path('dowload_PDF', views.generate_pdf, name='Dowload_PDF'),
     path('searchuser', views.search_user, name='Searching_user'),
     path('user_status_search', views.user_status_search, name='user_status_search'),
+    path('order_status_search', views.order_status_search,
+         name='OrderStatusSearch'),
+    path('order-search', views.oeder_search, name='searchOrder')
 
 ]

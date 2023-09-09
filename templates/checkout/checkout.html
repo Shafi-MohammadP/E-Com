@@ -178,10 +178,10 @@
                                             {% if i.variant.product.offer %}
                                             
                                             {% with product_total=i.variant.product.product_price|mul:i.product_qty  offer_total=i.variant.product.offer.discount_amount|mul:i.product_qty %}
-                                            <td><span><del>${{i.variant.product.product_price |mul:i.product_qty}} </del> </span>${{ product_total|sub:offer_total }} </td>
+                                            <td><span><del>₹{{i.variant.product.product_price |mul:i.product_qty}} </del> </span>₹{{ product_total|sub:offer_total }} </td>
                                             {% endwith %}
                                             {% else %}
-                                            <td>${{i.variant.product.product_price |mul:i.product_qty}}</td>
+                                            <td>₹{{i.variant.product.product_price |mul:i.product_qty}}</td>
                                             {% endif %}
                                             
                                         </tr>
@@ -191,19 +191,19 @@
                                             {% if coupon and offer %}
                                             <tr>
                                                 <td>Subtotal:</td>
-                                                <td>${{total_price|add:all_offer}}</td>
+                                                <td>₹{{total_price|add:all_offer}}</td>
                                             </tr>
                                            
                                             <tr> 
                                              <td>coupon applied:</td>
                                                 <input type="hidden" name="couponcheck" value="{{coupon}}">
-                                                <td>${{coupon}}</td>
+                                                <td>₹{{coupon}}</td>
                                             </tr>
 
                                             <tr> 
                                                 <td>offer applied:</td>
                                                 <input type="hidden" name="" value="">
-                                                <td>${{all_offer}}</td>
+                                                <td>₹{{all_offer}}</td>
                                             </tr>
 
 
@@ -211,12 +211,12 @@
                                                 {% if coupon %}
                                             <tr>
                                                 <td>Subtotal:</td>
-                                                <td>${{total_price}}</td>
+                                                <td>₹{{total_price}}</td>
                                             </tr>
                                             <tr> 
                                                 <td>coupon applied:</td>
                                                 <input type="hidden" name="couponcheck" value="{{coupon}}">
-                                                <td>${{coupon}}</td>
+                                                <td>₹{{coupon}}</td>
                                             </tr>
                                                 {% else %}
                                                 <input type="hidden" name="couponcheck" value="{{0}}">
@@ -224,12 +224,12 @@
                                                 {% if offer %}
                                                 <tr>
                                                     <td>Subtotal:</td>
-                                                    <td>${{total_price|add:all_offer}}</td>
+                                                    <td>₹{{total_price|add:all_offer}}</td>
                                                 </tr>
                                                 <tr> 
                                                     <td>offer applied:</td>
                                                     <input type="hidden" name="" value="">
-                                                    <td>${{ all_offer }}</td>
+                                                    <td>₹{{ all_offer }}</td>
                                                 </tr>
                                                 {% else %}
                                                 <input type="hidden" name="" value="">
@@ -238,7 +238,7 @@
                                                 {% if not offer and not coupon %}
                                                 <tr>
                                                     <td>Subtotal:</td>
-                                                    <td>${{total_price}}</td>
+                                                    <td>₹{{total_price}}</td>
                                                 </tr>
                                                 {% endif %}
                                         </tr><!-- End .summary-subtotal -->
@@ -249,10 +249,10 @@
                                         <tr class="summary-total">
                                             {% if coupon %}
                                             <td>Total:</td>
-                                            <td>${{ grand_total|sub:coupon }}</td>
+                                            <td>₹{{ grand_total|sub:coupon }}</td>
                                             {% else %}
                                             <td>Total:</td>
-                                            <td>${{grand_total}}</td>
+                                            <td>₹{{grand_total}}</td>
                                             {% endif %}
                                         </tr><!-- End .summary-total -->
                                     </tbody>

@@ -50,98 +50,114 @@ def logout1(request):
 
 def user_signup(request):
     if request.method == 'POST':
+
         get_otp = request.POST.get('otp')
 
         if get_otp:
-            get_email = request.POST.get('email')
-            usr = User.objects.get(email=get_email)
+            # get_email = request.POST.get('email')
+            # user = User.objects.get(email=get_email)
+            if not re.search(re.compile(r'^\d{6}$'), get_otp):
+                messages.error(request, 'OTP should only contain numeric!')
+                return render(request, 'user\signup.html', {'otp': True})
 
-            if int(get_otp) == UserOTP.objects.filter(user=usr).last().otp:
-                usr.is_active = True
-                usr.save()
-                auth.login(request, usr)
-                # messages.success(request,f'Account is created for {usr.email}')
-                UserOTP.objects.filter(user=usr).delete()
+            session_otp = request.session.get('otp')
+            if int(get_otp) == session_otp:
+                user.is_active = True
+                user.save()
+                auth.login(request, user)
+                messages.success(
+                    request, f'Account is created for {user.first_name}')
+                del request.session['otp']
                 return redirect('home')
             else:
                 messages.warning(request, f'you Entered a Wrong OTP')
-                return render(request, 'user/signup.html')
+                return render(request, 'user\signup.html', {'otp': True})
         else:
+            get_otp = request.POST.get('otp1')
 
-            firstname = request.POST['fname']
-            # lastname=request.POST['lname']
-            username = request.POST['username']
-            email = request.POST['email']
-            password1 = request.POST['password1']
-            password2 = request.POST['password2']
+            email = request.POST.get('user1')
 
-            context = {
-                'pre_firstname': firstname,
-                # 'pre_lastname':lastname,
-                'pre_username': username,
-                'pre_email': email,
-                'pre_password1': password1,
-                'pre_password2': password2
-            }
+            if get_otp:
+                # user = User.objects.get(email=email)
+                messages.warning(request, 'Feild cannot empty')
+                return render(request, 'user\signup.html', {'otp': True})
+            else:
 
-            if username.strip() == '' or password1.strip() == '' or password2.strip() == '' or email.strip() == '' or firstname.strip() == '':
-                messages.error(request, 'field cannot empty! ')
-                return render(request, 'user/signup.html', context)
+                firstname = request.POST['fname']
+                # lastname=request.POST['lname']
+                username = request.POST['username']
+                email = request.POST['email']
+                password1 = request.POST['password1']
+                password2 = request.POST['password2']
 
-            elif User.objects.filter(username=username):
-                messages.error(request, 'username alredy exist!')
-                context['pre_username'] = ''
-                return render(request, 'user/signup.html', context)
+                context = {
+                    'pre_firstname': firstname,
+                    # 'pre_lastname':lastname,
+                    'pre_username': username,
+                    'pre_email': email,
+                    'pre_password1': password1,
+                    'pre_password2': password2
+                }
 
-            elif not re.match(r'^[a-zA-Z\s]*$', username):
-                messages.error(
-                    request, 'Username should only contain alphabets!')
-                context['pre_username'] = ''
-                return render(request, 'user/signup.html', context)
+                if username.strip() == '' or password1.strip() == '' or password2.strip() == '' or email.strip() == '' or firstname.strip() == '':
+                    messages.error(request, 'field cannot empty! ')
+                    return render(request, 'user/signup.html', context)
 
-            elif User.objects.filter(email=email):
-                messages.error(request, 'email already exist!')
-                context['pre_email'] = ''
-                return render(request, 'user/signup.html', context)
+                elif User.objects.filter(username=username):
+                    messages.error(request, 'username alredy exist!')
+                    context['pre_username'] = ''
+                    return render(request, 'user/signup.html', context)
 
-            elif password1 != password2:
-                messages.error(request, "password doesn't match")
-                context['pre_password1'] = ''
-                context['pre_password2'] = ''
-                return render(request, 'user/signup.html', context)
+                elif not re.match(r'^[a-zA-Z\s]*$', username):
+                    messages.error(
+                        request, 'Username should only contain alphabets!')
+                    context['pre_username'] = ''
+                    return render(request, 'user/signup.html', context)
 
-            email_check = validateemail(email)
-            if email_check is False:
-                messages.error(request, 'email not valid!')
-                context['pre_email'] = ''
-                return render(request, 'user/signup.html', context)
+                elif User.objects.filter(email=email):
+                    messages.error(request, 'email already exist!')
+                    context['pre_email'] = ''
+                    return render(request, 'user/signup.html', context)
 
-            password_check = validatepassword(password1)
-            if password_check is False:
-                messages.error(request, 'Enter strong password!')
-                context['pre_password1'] = ''
-                context['pre_password2'] = ''
-                return render(request, 'user/signup.html', context)
+                elif password1 != password2:
+                    messages.error(request, "password doesn't match")
+                    context['pre_password1'] = ''
+                    context['pre_password2'] = ''
+                    return render(request, 'user/signup.html', context)
 
-            user = User.objects.create_user(
-                first_name=firstname, username=username, email=email, password=password1)
-            user.is_active = False
-            user.save()
-            user_otp = random.randint(100000, 999999)
-            UserOTP.objects.create(user=user, otp=user_otp)
-            mess = f'Hello \t{user.username},\nYour OTP to verify your account for Confirmation {user_otp}\n Thanks You!'
-            send_mail(
-                "Welcome to MS Sounds , verify your Email",
-                mess,
-                settings.EMAIL_HOST_USER,
-                [user.email],
+                email_check = validateemail(email)
+                if email_check is False:
+                    messages.error(request, 'email not valid!')
+                    context['pre_email'] = ''
+                    return render(request, 'user/signup.html', context)
 
-                fail_silently=False
+                password_check = validatepassword(password1)
+                if password_check is False:
+                    messages.error(request, 'Enter strong password!')
+                    context['pre_password1'] = ''
+                    context['pre_password2'] = ''
+                    return render(request, 'user/signup.html', context)
+
+                user = User.objects.create_user(
+                    first_name=firstname, username=username, email=email, password=password1)
+                user.is_active = False
+                user.save()
+                user_otp = random.randint(100000, 999999)
+                UserOTP.objects.create(user=user, otp=user_otp)
+                request.session['otp'] = user_otp
+                mess = f'Hello \t{user.username},\nYour OTP to verify your account for Confirmation {user_otp}\n Thanks You!'
+                send_mail(
+                    "Welcome to MS Sounds , verify your Email",
+                    mess,
+                    settings.EMAIL_HOST_USER,
+                    [user.email],
+
+                    fail_silently=False
 
 
-            )
+                )
 
-            return render(request, 'user/signup.html', {'otp': True, 'user': user})
+                return render(request, 'user/signup.html', {'otp': True, 'user': user})
 
     return render(request, 'user/signup.html')
 

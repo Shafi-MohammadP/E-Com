@@ -88,7 +88,7 @@
                                     </td>
                                     <td class="price-col">{{i.variant.color.color_name}}</td>
                                     {% comment %} <td class="price-col">{{i.variant.size.size_range}}</td> {% endcomment %}
-                                    <td class="price-col">${{i.variant.product.product_price}}</td>
+                                    <td class="price-col">₹{{i.variant.product.product_price}}</td>
                                     <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
@@ -106,7 +106,7 @@
                                    
                                     <!-- Assuming the previous code is here and we focus on the "total-col" element -->
                                     <td class="total-col">
-                                        $<span id='single_{{i.id}}'>
+                                        ₹<span id='single_{{i.id}}'>
                                             {% if single %}
                                             {{ single }}
                                             {% else %}
@@ -150,7 +150,7 @@
                                 <tbody>
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$<span id='Subtotal'>{{total_price}}</span></td>
+                                        <td>₹<span id='Subtotal'>{{total_price}}</span></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr class="summary-shipping">
                                         <td>Shipping:</td>
@@ -166,7 +166,7 @@
                                                     Shipping</label>
                                             </div><!-- End .custom-control -->
                                         </td>
-                                        <td>$0.00</td>
+                                        <td>₹0.00</td>
                                     </tr><!-- End .summary-shipping-row -->
 
                                     <tr class="summary-shipping-row">
@@ -178,7 +178,7 @@
                                                     for="standart-shipping">Standart:</label>
                                             </div><!-- End .custom-control -->
                                         </td>
-                                        <td>$0.00</td>
+                                        <td>₹0.00</td>
                                     </tr><!-- End .summary-shipping-row -->
 
                                     <tr class="summary-shipping-row">
@@ -190,7 +190,7 @@
                                                     for="express-shipping">Express:</label>
                                             </div><!-- End .custom-control -->
                                         </td>
-                                        <td>$0.00</td>
+                                        <td>₹0.00</td>
                                     </tr><!-- End .summary-shipping-row -->
 
                                     <tr class="summary-shipping-estimate">
@@ -201,7 +201,7 @@
 
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>$<span id='grand_total'>{{total_price}}</span></td>
+                                        <td>₹<span id='grand_total'>{{total_price}}</span></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                             </table><!-- End .table table-summary -->

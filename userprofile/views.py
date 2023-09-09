@@ -1,3 +1,9 @@
+from checkout.models import Order, OrderItem
+from django.shortcuts import redirect
+from django.contrib import messages
+from fpdf import FPDF
+from django.template.loader import get_template
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache import cache_control, never_cache
 
@@ -15,6 +21,10 @@ from django.db.models import OuterRef, Subquery
 from cart.models import Cart
 from wishlist.models import Wishlist
 from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.template.loader import get_template
+from fpdf import FPDF
+from io import BytesIO
 
 # verification email
 import re
@@ -519,6 +529,70 @@ def order_detail_view(request, view_id):
     except Address.DoesNotExist:
         print("Address does not exist")
     return redirect('userprofile')
+ # You'll need to install xhtml2pdf library
+
+
+def download_invoice(request, view_id):
+    try:
+        # Retrieve the order based on view_id
+        order = Order.objects.get(id=view_id)
+
+        # Retrieve related order items
+        order_items = OrderItem.objects.filter(order=order)
+
+        # Create a PDF document
+        class PDF(FPDF):
+            def header(self):
+                self.set_font('Arial', 'B', 12)
+                self.cell(0, 10, 'Invoice', align='C', ln=True)
+
+            def footer(self):
+                self.set_y(-15)
+                self.set_font('Arial', 'I', 8)
+                self.cell(0, 10, f'Page {self.page_no()}', 0, 0, 'C')
+
+        pdf = PDF()
+        pdf.add_page()
+        pdf.set_font('Arial', '', 12)
+
+        # Add order details
+        pdf.cell(0, 10, f'Order ID: {order.id}', ln=True)
+        pdf.cell(0, 10, f'Order Date: {order.created_at}', ln=True)
+        pdf.cell(0, 10, f'Total Amount: ${order.total_price}', ln=True)
+        pdf.cell(0, 10, f'Payment Mode: {order.payment_mode}', ln=True)
+
+        # Add a table for order items
+        pdf.ln(10)  # Move down to create space before the table
+        # Set background color for header row
+        pdf.set_fill_color(200, 200, 200)
+        pdf.cell(60, 10, 'Product Name', 1, 0, 'C', 1)  # Header: Product Name
+        pdf.cell(30, 10, 'Price', 1, 0, 'C', 1)  # Header: Price
+        pdf.cell(30, 10, 'Quantity', 1, 0, 'C', 1)  # Header: Quantity
+        pdf.cell(40, 10, 'Subtotal', 1, 1, 'C', 1)  # Header: Subtotal
+
+        # Add order item rows
+        for item in order_items:
+            # Product Name
+            pdf.cell(60, 10, item.variant.product.product_name, 1)
+            pdf.cell(30, 10, f'${item.price}', 1)  # Price
+            pdf.cell(30, 10, str(item.quantity), 1)  # Quantity
+            # Subtotal
+            pdf.cell(40, 10, f'${item.price * item.quantity}', 1, 1)
+
+        # Generate PDF content as bytes
+        pdf_bytes = pdf.output(dest='S').encode('latin1')
+
+        # Create an HttpResponse with the PDF content
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="invoice_{view_id}.pdf"'
+
+        return response
+
+    except Order.DoesNotExist:
+        messages.error(request, 'Order does not exist')
+        return redirect('userprofile')
+
+    # Handle any other exceptions or errors as needed
 
 
 # def download_invoice(request, order_id):

@@ -3,6 +3,15 @@
 {% load static %}
 {% block content %}
 
+<style>
+    .small-download-button {
+        padding: 5px 10px; /* Adjust padding to control the button size */
+        font-size: 12px; /* Adjust font size as needed */
+    }
+	.small-download-button:hover{
+		font-weight: bold;
+	}
+</style>
 
 <body>
 
@@ -127,7 +136,11 @@
 																			{{ order.order_status.order_status }}
 																		</b>
 																	</td>
-																	
+																	<td>
+																		<a href="{% url 'download_invoice' order.id %}" class="small-download-button">Invoice</a>
+
+
+																	</td>
 															</tr>
 															{% endfor %}
 														</tbody>
